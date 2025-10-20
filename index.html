@@ -58,6 +58,7 @@
       animation:rise .6s cubic-bezier(.2,.8,.2,1) both;
       animation-delay:var(--d,0s);
     }
+    
     .card h3{margin:0 0 6px 0;font-size:20px}
     .card p{margin:6px 0 0 0;color:var(--muted)}
     .row-2>.card{grid-column:span 6}
@@ -153,7 +154,7 @@
         { label: "GitHub", href: "https://github.com/KhwajaTaha" },
         { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
       ],
-      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817", "+46 764428529"] },
+      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
       skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
       experience: [
         { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present", bullets:[
@@ -223,7 +224,7 @@
 
             <div className="pill-row" id="skills">
               {info.skills.slice(0, 10).map((s, i) => <span key={i} className="pill">{s}</span>)}
-              <span className="pill">+ more below</span>
+              
             </div>
 
             <div className="links" role="group" aria-label="Primary actions" style={{display:'flex'}}>
@@ -234,7 +235,7 @@
 
           <div className="frame" aria-hidden="true">
             {/* Replace with your photo or remove the <img> */}
-            <img className="profile" src="assets/profile.jpg" alt="Portrait of Khwaja Mohd Taha" />
+            <img className="profile" src="assets/profile.jpeg" alt="Portrait of Khwaja Mohd Taha" />
           </div>
         </div>
       </section>
@@ -304,44 +305,59 @@
     );
 
     const Contact = () => (
-      <section id="contact" aria-label="Contact & Links">
-        <div className="container">
-          <SectionTitle title="Contact & Links" />
-          <div className="grid contact">
-            <div className="card" style={{'--d': '0s'}}>
-              <div>
-                <div className="kicker">Email</div>
-                <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
-              </div>
-              <span aria-hidden="true">✉</span>
-            </div>
-            <div className="card" style={{'--d': '.05s'}}>
-              <div>
-                <div className="kicker">Phone</div>
-                <div className="meta">{info.contact.phones.join(" · ")}</div>
-              </div>
-              <span aria-hidden="true">📱</span>
-            </div>
-            {info.socials.map((s, i)=>(
-              <div className="card" key={i} style={{'--d': `${(i+2)*0.05}s`}}>
-                <div>
-                  <div className="kicker">{s.label}</div>
-                  <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
-                </div>
-                <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
-              </div>
-            ))}
-            <div className="card" style={{'--d': '.25s'}}>
-              <div>
-                <div className="kicker">Résumé</div>
-                <a href={info.resumeHref} download>Download PDF</a>
-              </div>
-              <span aria-hidden="true">⬇</span>
-            </div>
+  <section id="contact" aria-label="Contact & Links">
+    <div className="container">
+      <SectionTitle title="Contact & Links" />
+      <div className="grid contact">
+        <div className="card" style={{'--d': '0s'}}>
+          <div>
+            <div className="kicker">Email</div>
+            <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
           </div>
+          <span aria-hidden="true">✉</span>
         </div>
-      </section>
-    );
+
+        <div className="card" style={{'--d': '.05s'}}>
+          <div>
+            <div className="kicker">Phone</div>
+            <div className="meta">{info.contact.phones.join(" · ")}</div>
+          </div>
+          <span aria-hidden="true">📱</span>
+        </div>
+
+        {info.socials.map((s, i)=>(
+          <div className="card" key={i} style={{'--d': `${(i+2)*0.05}s`}}>
+            <div>
+              <div className="kicker">{s.label}</div>
+              <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
+            </div>
+            <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
+          </div>
+        ))}
+
+        <div className="card" style={{'--d': '.25s'}}>
+          <div>
+            <div className="kicker">Résumé</div>
+            <a href={info.resumeHref} download>Download PDF</a>
+          </div>
+          <span aria-hidden="true">⬇</span>
+        </div>
+
+        {/* ✅ MOVE THIS CARD INSIDE THE GRID */}
+        <div className="card" style={{'--d': '.3s'}}>
+          <div>
+            <div className="kicker">Itch.io Profile</div>
+            <a href="https://imperfect-wizard.itch.io/" target="_blank" rel="noopener">
+              https://imperfect-wizard.itch.io/
+            </a>
+          </div>
+          <span aria-hidden="true">🎮</span>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
 
     const Footer = () => (
       <footer className="footer">

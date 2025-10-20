@@ -1,124 +1,400 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Khwaja Mohd Taha — Game Programmer</title>
+  <meta name="description" content="Portfolio of Khwaja Mohd Taha — Game Programmer / Software Engineer specializing in Unity, Unreal, and WebGL." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#07090c; --panel:#0d1016; --panel-2:#111622; --text:#eef3fb; --muted:#a7b2c5;
+      --brand:#66e3ff; --brand-2:#7aff9b; --ring:rgba(102,227,255,.45);
+      --card:#0b1018; --border:rgba(255,255,255,.09); --shadow:0 10px 30px rgba(0,0,0,.5);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Noto Color Emoji",sans-serif}
+    a{color:var(--brand);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .container{width:min(1080px,92vw);margin:0 auto}
 
-        <link rel="stylesheet" href="styles.css">
+    /* Header / Nav */
+    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
+      background:linear-gradient(180deg,rgba(7,9,12,.75),rgba(7,9,12,.35));border-bottom:1px solid var(--border)}
+    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
+    .brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.3px}
+    .dot{width:12px;height:12px;border-radius:999px;background:conic-gradient(from 0deg,var(--brand),var(--brand-2),var(--brand));box-shadow:0 0 20px var(--ring)}
+    .badge{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;color:var(--muted)}
+    .links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+    .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--border);box-shadow:var(--shadow);font-weight:600}
+    .btn:hover{transform:translateY(-1px);transition:.15s transform ease;text-decoration:none}
+    .btn-primary{background:linear-gradient(180deg,rgba(102,227,255,.18),rgba(122,255,155,.18));border-color:rgba(102,227,255,.35)}
+    .menu-btn{display:none;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:10px 12px;color:var(--text)}
 
-        <!-- =====BOX ICONS===== -->
-        <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
+    /* Drawer */
+    .drawer{position:fixed;inset:0 0 0 auto;width:82vw;max-width:360px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-left:1px solid var(--border);transform:translateX(102%);transition:transform .25s ease;z-index:60;display:flex;flex-direction:column;padding:18px}
+    .drawer.open{transform:translateX(0)}
+    .drawer a{padding:12px 10px;border-radius:10px;border:1px solid transparent;display:block}
+    .drawer a:hover{border-color:var(--border);background:var(--card);text-decoration:none}
+    .drawer .close{align-self:flex-end;margin:-6px -6px 12px}
 
-        <title>Portfolio</title>
-    </head>
-    <body>
-        <!--===== HEADER =====-->
-        <header class="l-header">
-            <nav class="nav bd-grid">
-                <div>
-                    <a href="#" class="nav__logo">Taha</a>
-                </div>
+    /* Sections */
+    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;padding:56px 0 24px;align-items:center}
+    .hero h1{font-size:clamp(30px,6vw,58px);line-height:1.05;margin:0 0 8px 0}
+    .hero p{color:var(--muted);font-size:clamp(15px,2.2vw,18px);margin:0 0 20px 0}
+    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px}
+    .pill{font-size:13px;padding:8px 12px;border:1px solid var(--border);color:var(--muted);border-radius:999px;background:var(--card);backdrop-filter:blur(2px)}
+    .frame{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:radial-gradient(1200px 600px at 20% 0%,rgba(102,227,255,.06),transparent 40%),radial-gradient(800px 400px at 100% 60%,rgba(122,255,155,.06),transparent 50%),var(--panel)}
+    .profile{aspect-ratio:4/5;width:100%;object-fit:cover;display:block;filter:saturate(1.05) contrast(1.02)}
 
-                <div class="nav__menu" id="nav-menu">
-                    <ul class="nav__list">
-                        <li class="nav__item"><a href="#home" class="nav__link active">Home</a></li>
-                        <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
-                        
-                        <li class="nav__item"><a href="#work" class="nav__link">Work</a></li>
-                        
-                    </ul>
-                </div>
+    section{padding:44px 0}
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(12,1fr)}
+    .card{
+      grid-column:span 12;padding:18px;border:1px solid var(--border);border-radius:16px;
+      background:linear-gradient(180deg,rgba(102,227,255,.07),rgba(122,255,155,.03)),linear-gradient(180deg,var(--panel),var(--panel-2));
+      box-shadow:var(--shadow);
+      animation:rise .6s cubic-bezier(.2,.8,.2,1) both;
+      animation-delay:var(--d,0s);
+    }
+    .card h3{margin:0 0 6px 0;font-size:20px}
+    .card p{margin:6px 0 0 0;color:var(--muted)}
+    .row-2>.card{grid-column:span 6}
+    .row-3>.card{grid-column:span 4}
+    .thumb{width:100%;border-radius:12px;margin-bottom:10px;display:block;transition:transform .3s, box-shadow .3s}
+    .thumb:hover{transform:scale(1.03);box-shadow:0 0 18px rgba(102,227,255,.3)}
+    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
+    .title-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px}
+    .title-row a{font-size:14px;color:var(--muted)}
+    .exp{display:grid;gap:14px}
+    .exp-item{padding:16px;border:1px dashed var(--border);border-radius:14px;background:var(--card);animation:rise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
+    .meta{color:var(--muted);font-size:13px;margin-top:4px}
+    .footer{padding:26px 0 70px;border-top:1px solid var(--border);color:var(--muted);text-align:center}
+    .contact{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
+    .contact .card{display:flex;justify-content:space-between;align-items:center}
+    .contact a{font-weight:600}
 
-                <div class="nav__toggle" id="nav-toggle">
-                    <i class='bx bx-menu'></i>
-                </div>
-            </nav>
-        </header>
+    @keyframes rise{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
 
-        <main class="l-main">
-            <!--===== HOME =====-->
-            <section class="home bd-grid" id="home">
-                <div class="home__data">
-                    <h1 class="home__title">Hi,<br>I'am <span class="home__title-color">Taha</span><br> Game programmer</h1>
+    /* BG FX */
+    .bg-wrap{position:fixed;inset:0;z-index:-1;overflow:hidden}
+    #bg{width:100%;height:100%;display:block}
+    .glow{position:fixed;inset:auto -30% -40% auto;width:65vmax;height:65vmax;background:radial-gradient(closest-side,rgba(122,255,155,.08),transparent 70%);filter:blur(30px);pointer-events:none;z-index:-1;animation:float 14s ease-in-out infinite}
+    @keyframes float{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-4%,-2%) rotate(6deg)}}
 
-                    
-                </div>
+    /* Mobile */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr;padding-top:30px}
+      .row-2>.card,.row-3>.card{grid-column:span 12}
+      .contact{grid-template-columns:1fr}
+      .links{display:none}
+      .menu-btn{display:inline-flex}
+      .btn,.btn-primary{width:100%;justify-content:center}
+      nav{padding:12px 0}
+    }
+    .focus-ring:focus{outline:2px solid var(--ring);outline-offset:2px}
+  </style>
+</head>
+<body>
+  <!-- Animated Background -->
+  <div class="bg-wrap" aria-hidden="true">
+    <canvas id="bg"></canvas>
+    <div class="glow"></div>
+  </div>
 
-                <div class="home__social">
-                    <a href="https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" class="home__social-icon"><i class='bx bxl-linkedin'></i></a>                    
-                    <a href="https://github.com/KhwajaTaha" class="home__social-icon"><i class='bx bxl-github' ></i></a>
-                </div>
+  <header>
+    <div class="container">
+      <nav aria-label="Main Navigation">
+        <div class="brand">
+          <span class="dot"></span>
+          <span>Khwaja Mohd Taha</span>
+          <span class="badge">Game Programmer</span>
+        </div>
 
-                <div class="home__img">    
-                    <img src="assets/img/perfil.png" alt="">
-                </div>
-            </section>
+        <div class="links" aria-label="Primary">
+          <a href="#skills">Skills</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a class="btn btn-primary" href="assets/Taha_Resume_.pdf" download>Download Résumé</a>
+        </div>
 
-            <!--===== ABOUT =====-->
-            <section class="about section " id="about">
-                <h2 class="section-title">About</h2>
+        <button class="menu-btn focus-ring" id="openMenu" aria-label="Open menu">☰</button>
+      </nav>
+    </div>
+  </header>
 
-                <div class="about__container bd-grid">
-                    <div class="about__img">
-                        <img src="assets/img/about.jpg" alt="">
-                    </div>
-                    
-                    <div>
-                        <h2 class="about__subtitle">About me</h2>
-                        <p class="about__text">I am Computer Science student and an aspiring games programmer. I have 1 year of experience with unity. I have also worked on some solo and team projects. I have a passion for game development.</p>           
-                    </div>                                   
-                </div>
-            </section>
+  <!-- Mobile Drawer -->
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <button class="btn close" id="closeMenu" aria-label="Close menu">✕</button>
+  
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a class="btn btn-primary" href="assets/Taha_Resume_.pdf" download>⬇ Download Résumé</a>
+    <a class="btn" href="#contact">✉ Contact</a>
+  </aside>
 
-            <!--===== SKILLS =====-->
-            
+  <main id="root"></main>
 
-            <!--===== WORK =====-->
-            <section class="work section" id="work">
-                <h2 class="section-title">Work</h2>
+  <!-- React + JSX -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-                <div class="work__container bd-grid">
-                    <div class="work__img">
-                       <img src="1.png" alt="">
-                    </div>
-                    <div class="work__img">
-                        <a href="https://imperfect-wizard.itch.io/cubes"> <img src="hey.png" alt=""> </a>
-                    </div>
-                    <div class="work__img">
-                        <img src="nn.png" alt="">
-                    </div>
-                    <div class="work__img">
-                        <img src="3.png" alt="">
-                    </div>
-                    <div class="work__img">
-                        <img src="" alt="">
-                    </div>
-                    <div class="work__img">
-                        <a href="https://imperfect-wizard.itch.io/mirror-world">  <img src="hi.png" alt=""> </a>
-                    </div>
-                </div>
-            </section>
+  <script type="text/babel">
+    /* ========= Site Data ========= */
+    const info = {
+      name: "Khwaja Mohd Taha",
+      title: "Game Programmer / Software Engineer",
+      summary: `Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.`,
+      resumeHref: "assets/Taha_Resume_.pdf",
+      socials: [
+        { label: "GitHub", href: "https://github.com/KhwajaTaha" },
+        { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
+      ],
+      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817", "+46 764428529"] },
+      skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
+      experience: [
+        { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present", bullets:[
+          "Developed and maintained Lawyaltech.org; improved UX and performance.",
+          "Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.",
+          "Led a dev team; ensured security and code-quality compliance."
+        ]},
+        { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – Present", bullets:[
+          "Cross-functional collaboration to deliver seamless product support.",
+          "Identified process improvements and guided customers."
+        ]},
+        { role:"Indie Game Developer (Self-Employed)", company:"Steam & itch.io", period:"Mar 2023 – Present", bullets:[
+          "Designed and shipped multiple indie titles.",
+          "Built gameplay systems, UI and core mechanics in Unity & Godot."
+        ]},
+        { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023", bullets:[
+          "Contributed to Temple Run 2 systems and performance work.",
+          "Unity + Svelte + TypeScript; tests and perf benchmarks."
+        ]},
+        { role:"Game Programmer Intern", company:"Xansr Technologies", period:"Sep 2021 – Aug 2022", bullets:[
+          "Client projects in Unity3D and web engines.",
+          "C#, Phaser, TypeScript, Git, Svelte."
+        ]}
+      ],
+      projects: [
+        {
+          name:"Mirror World",
+          tag:"2D Puzzle Platformer",
+          blurb:"Can you hold them together? A dual-control reflection game for Android.",
+          img:"assets/mirror.png",
+          href:"https://imperfect-wizard.itch.io/mirror-world"
+        },
+        {
+          name:"Shores in the Abyss",
+          tag:"3D FPS (Unity)",
+          blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.",
+          img:"assets/shores.png",
+          href:"https://shariqusmani.itch.io/shores-in-the-abyss"
+        },
+        {
+          name:"An Unordinary Place",
+          tag:"WebGL Narrative",
+          blurb:"A short emotional story built for Brackeys Game Jam.",
+          img:"assets/unordinary-place.png",
+          href:"https://imperfect-wizard.itch.io/an-unordinary-place"
+        },
+        {
+          name:"Rider Santa",
+          tag:"2D Racing",
+          blurb:"Deliver gifts while racing across snowy hills — a festive Unity game!",
+          img:"assets/Rider-santa.png",
+          href:"https://imperfect-wizard.itch.io/rider-santa"
+        }
+      ]
+    };
 
-            <!--===== CONTACT =====-->
-           
-        </main>
+    /* ========= Components ========= */
+    const Icon = ({children,label}) => <span aria-hidden="true" title={label} style={{fontWeight:700}}>{children}</span>;
 
-        <!--===== FOOTER =====-->
-        <footer class="footer">
-            <p class="footer__title"></p>
-            <div class="footer__social">
-                <a href="https://www.facebook.com/khwaja.taha.9" class="footer__icon"><i class='bx bxl-facebook' ></i></a>
-                <a href="https://www.instagram.com/imperfect_geniuss/?igshid=1drqvl33f1g6o" class="footer__icon"><i class='bx bxl-instagram' ></i></a>
-                <a href="https://twitter.com/KhwajaTaha1?s=08" class="footer__icon"><i class='bx bxl-twitter' ></i></a>
+    const Hero = () => (
+      <section aria-label="Intro">
+        <div className="container hero">
+          <div>
+            <div className="kicker">Game Programmer</div>
+            <h1>{info.name}</h1>
+            <p>{info.summary}</p>
+
+            <div className="pill-row" id="skills">
+              {info.skills.slice(0, 10).map((s, i) => <span key={i} className="pill">{s}</span>)}
+              <span className="pill">+ more below</span>
             </div>
-           
-        </footer>
 
+            <div className="links" role="group" aria-label="Primary actions" style={{display:'flex'}}>
+              <a className="btn btn-primary focus-ring" href={info.resumeHref} download><Icon>⬇</Icon> Download Résumé</a>
+              <a className="btn focus-ring" href="#contact"><Icon>✉</Icon> Contact</a>
+            </div>
+          </div>
 
-        <!--===== SCROLL REVEAL =====-->
-        <script src="https://unpkg.com/scrollreveal"></script>
+          <div className="frame" aria-hidden="true">
+            {/* Replace with your photo or remove the <img> */}
+            <img className="profile" src="assets/profile.jpg" alt="Portrait of Khwaja Mohd Taha" />
+          </div>
+        </div>
+      </section>
+    );
 
-        <!--===== MAIN JS =====-->
-        <script src="main.js"></script>
-    </body>
+    const SectionTitle = ({id, title, href}) => (
+      <div className="title-row">
+        <h2 id={id} style={{margin:"0 0 6px 0"}}>{title}</h2>
+        {href && <a href={href} aria-label={`${title} link`}>View All</a>}
+      </div>
+    );
+
+   
+
+    const Skills = () => (
+      <section aria-label="Skills">
+        <div className="container">
+          <SectionTitle title="Skills" />
+          <div className="grid row-3">
+            {info.skills.map((s, i)=>(
+              <div className="card" key={i} style={{'--d': `${i * 0.02}s`}}>
+                <strong>{s}</strong>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Experience = () => (
+      <section id="experience" aria-label="Experience">
+        <div className="container">
+          <SectionTitle title="Experience" />
+          <div className="exp">
+            {info.experience.map((e, i)=>(
+              <article className="exp-item" key={i} style={{'--d': `${i * 0.06}s`}}>
+                <h4>{e.role} — {e.company}</h4>
+                <div className="meta">{e.period}</div>
+                <ul style={{margin:"10px 0 0 20px"}}>
+                  {e.bullets.map((b, j)=><li key={j}>{b}</li>)}
+                </ul>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Projects = () => (
+      <section id="projects" aria-label="More Projects">
+        <div className="container">
+          <SectionTitle title="More Projects" />
+          <div className="grid row-2">
+            {info.projects.map((p, i)=>(
+              <article className="card" key={i} style={{'--d': `${i * 0.05}s`}}>
+                <a href={p.href} target="_blank" rel="noopener">
+                  <img className="thumb" src={p.img} alt={`${p.name} cover`} />
+                </a>
+                <h3><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
+                <div className="meta">{p.tag}</div>
+                <p>{p.blurb}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const Contact = () => (
+      <section id="contact" aria-label="Contact & Links">
+        <div className="container">
+          <SectionTitle title="Contact & Links" />
+          <div className="grid contact">
+            <div className="card" style={{'--d': '0s'}}>
+              <div>
+                <div className="kicker">Email</div>
+                <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
+              </div>
+              <span aria-hidden="true">✉</span>
+            </div>
+            <div className="card" style={{'--d': '.05s'}}>
+              <div>
+                <div className="kicker">Phone</div>
+                <div className="meta">{info.contact.phones.join(" · ")}</div>
+              </div>
+              <span aria-hidden="true">📱</span>
+            </div>
+            {info.socials.map((s, i)=>(
+              <div className="card" key={i} style={{'--d': `${(i+2)*0.05}s`}}>
+                <div>
+                  <div className="kicker">{s.label}</div>
+                  <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
+                </div>
+                <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
+              </div>
+            ))}
+            <div className="card" style={{'--d': '.25s'}}>
+              <div>
+                <div className="kicker">Résumé</div>
+                <a href={info.resumeHref} download>Download PDF</a>
+              </div>
+              <span aria-hidden="true">⬇</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Footer = () => (
+      <footer className="footer">
+        <div className="container">
+          © {new Date().getFullYear()} {info.name}. Built with React (CDN), HTML & CSS.
+        </div>
+      </footer>
+    );
+
+    const App = () => (<><Hero/><Skills/><Experience/><Projects/><Contact/><Footer/></>);
+
+    /* Mount */
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+
+    /* Drawer */
+    const drawer = document.getElementById('drawer');
+    const openBtn = document.getElementById('openMenu');
+    const closeBtn = document.getElementById('closeMenu');
+    const setOpen = (v) => {
+      drawer.classList.toggle('open', v);
+      drawer.setAttribute('aria-hidden', !v);
+      document.body.style.overflow = v ? 'hidden' : '';
+    };
+    openBtn.addEventListener('click', ()=>setOpen(true));
+    closeBtn.addEventListener('click', ()=>setOpen(false));
+    drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>setOpen(false)));
+
+    /* Animated background (lightweight, mobile-friendly) */
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d', { alpha: true });
+    let dpr = Math.min(2, window.devicePixelRatio || 1);
+    let w, h; const particles=[]; const MAX = matchMedia('(max-width: 900px)').matches ? 24 : 40;
+
+    function resize(){ w = canvas.width = Math.floor(innerWidth * dpr); h = canvas.height = Math.floor(innerHeight * dpr); canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px'; }
+    addEventListener('resize', resize); resize();
+
+    function rand(a,b){return a + Math.random()*(b-a)}
+    function spawn(){ const s=rand(.08,.35), r=rand(80,220)*dpr; return {x:rand(0,w),y:rand(0,h),vx:rand(-s,s),vy:rand(-s,s),r,t:rand(0,6.28),hs:Math.random()}; }
+    for(let i=0;i<MAX;i++) particles.push(spawn());
+
+    function draw(){
+      ctx.clearRect(0,0,w,h); ctx.globalCompositeOperation='lighter';
+      for(const p of particles){
+        p.t += .003; p.x += p.vx + Math.cos(p.t)*.3; p.y += p.vy + Math.sin(p.t*1.3)*.25;
+        if(p.x<-p.r)p.x=w+p.r; if(p.x>w+p.r)p.x=-p.r; if(p.y<-p.r)p.y=h+p.r; if(p.y>h+p.r)p.y=-p.r;
+        const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+        g.addColorStop(0,`hsla(${200+p.hs*80},100%,60%,.06)`); g.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill();
+      }
+      ctx.globalCompositeOperation='source-over'; requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
 </html>

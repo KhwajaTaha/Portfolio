@@ -21,8 +21,21 @@
     .container{width:min(1080px,92vw);margin:0 auto}
 
     /* Header / Nav */
-    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);
-      background:linear-gradient(180deg,rgba(7,9,12,.75),rgba(7,9,12,.35));border-bottom:1px solid var(--border)}
+    /* === Fixed Navbar === */
+header {
+  position: fixed;         /* stays in place even when scrolling */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;           /* ensure it’s above everything else */
+  backdrop-filter: blur(10px);
+  background: linear-gradient(180deg, rgba(7,9,12,.9), rgba(7,9,12,.6));
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,.45);
+}
+
+
+    
     nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
     .brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.3px}
     .dot{width:12px;height:12px;border-radius:999px;background:conic-gradient(from 0deg,var(--brand),var(--brand-2),var(--brand));box-shadow:0 0 20px var(--ring)}
@@ -39,6 +52,28 @@
     .drawer a{padding:12px 10px;border-radius:10px;border:1px solid transparent;display:block}
     .drawer a:hover{border-color:var(--border);background:var(--card);text-decoration:none}
     .drawer .close{align-self:flex-end;margin:-6px -6px 12px}
+    /* Drawer + Backdrop layers */
+.drawer{
+  position: fixed; inset: 0 0 0 auto; width: 82vw; max-width: 360px;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border-left: 1px solid var(--border);
+  transform: translateX(102%);
+  transition: transform .25s ease;
+  z-index: 1001;                 /* above backdrop */
+  display: flex; flex-direction: column; padding: 18px;
+}
+.drawer.open{ transform: translateX(0); }
+
+.backdrop{
+  position: fixed; inset: 0; z-index: 1000;      /* below drawer, above page */
+  background: rgba(0,0,0,.35);
+  opacity: 0; pointer-events: none; transition: opacity .2s ease;
+}
+.backdrop.show{ opacity: 1; pointer-events: auto; }
+
+/* Ensure page scroll bars reappear when closed */
+body.menu-open{ overflow: hidden; }
+
 
     /* Sections */
     .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;padding:56px 0 24px;align-items:center}
@@ -105,6 +140,9 @@
   </div>
 
   <header>
+    <!-- Backdrop for tapping outside the drawer on mobile -->
+<div id="backdrop" class="backdrop" aria-hidden="true"></div>
+
     <div class="container">
       <nav aria-label="Main Navigation">
         <div class="brand">
@@ -374,17 +412,32 @@
     root.render(<App />);
 
     /* Drawer */
-    const drawer = document.getElementById('drawer');
-    const openBtn = document.getElementById('openMenu');
-    const closeBtn = document.getElementById('closeMenu');
-    const setOpen = (v) => {
-      drawer.classList.toggle('open', v);
-      drawer.setAttribute('aria-hidden', !v);
-      document.body.style.overflow = v ? 'hidden' : '';
-    };
-    openBtn.addEventListener('click', ()=>setOpen(true));
-    closeBtn.addEventListener('click', ()=>setOpen(false));
-    drawer.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>setOpen(false)));
+   /* === Drawer (Mobile Nav) — Scroll Fix === */
+const drawer = document.getElementById('drawer');
+const openBtn = document.getElementById('openMenu');
+const closeBtn = document.getElementById('closeMenu');
+
+function toggleDrawer(force) {
+  const isOpen = force !== undefined ? force : !drawer.classList.contains('open');
+  drawer.classList.toggle('open', isOpen);
+  drawer.setAttribute('aria-hidden', !isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : 'auto'; // ✅ ensures scroll always resets properly
+}
+
+// Open/Close controls
+openBtn.addEventListener('click', () => toggleDrawer(true));
+closeBtn.addEventListener('click', () => toggleDrawer(false));
+
+// Clicking any link inside drawer closes it and restores scroll
+drawer.querySelectorAll('a').forEach(a =>
+  a.addEventListener('click', () => toggleDrawer(false))
+);
+
+// Optional: close on Escape key
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleDrawer(false);
+});
+
 
     /* Animated background (lightweight, mobile-friendly) */
     const canvas = document.getElementById('bg');

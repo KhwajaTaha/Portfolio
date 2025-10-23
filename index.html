@@ -151,6 +151,34 @@ object-position: -5% -80%; }
     .row-2 > .card, .row-3 > .card{ grid-column:span 12; }
     .contact{ grid-template-columns:1fr; }
   }
+
+  /* ========= Motion primitives ========= */
+@media (prefers-reduced-motion:no-preference){
+  .reveal-init{opacity:0; transform:translateY(14px) scale(.98); will-change:opacity,transform}
+  .reveal-in{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1)}
+}
+
+/* Subtle 3D tilt on hover/move (cards, project thumbs) */
+.use-tilt{transform-style:preserve-3d}
+.use-tilt::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:.0; transition:opacity .25s}
+.use-tilt:hover::after{opacity:.12; box-shadow:0 10px 40px rgba(255,255,255,.08) inset}
+.use-tilt{--rx:0deg; --ry:0deg}
+.use-tilt:hover{transform:translateY(-2px) rotateX(var(--rx)) rotateY(var(--ry))}
+
+/* Magnetic buttons */
+.btn.magnet{--mx:0px; --my:0px; transform:translate(var(--mx),var(--my)); transition:transform .12s ease}
+.btn.magnet:active{transform:translate(calc(var(--mx)*.4),calc(var(--my)*.4)) scale(.98)}
+
+/* Animated underline for links inside cards */
+.card a{background-image:linear-gradient(currentColor,currentColor); background-repeat:no-repeat; background-size:0% 2px; background-position:0 100%; transition:background-size .25s ease}
+.card a:hover{background-size:100% 2px}
+
+/* Avatar gentle parallax */
+.avatar-wrap{will-change:transform}
+
+/* Active nav link */
+.links a.active{border-bottom-color:var(--fg)}
+
 </style>
 </head>
 <body>
@@ -197,6 +225,111 @@ object-position: -5% -80%; }
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
+
+/* ========= Motion & Interactions ========= */
+(() => {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Smooth anchor scrolling with fixed header offset
+  const header = document.querySelector('header');
+  const headerH = () => header?.getBoundingClientRect().height || 0;
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      e.preventDefault();
+      const y = el.getBoundingClientRect().top + window.scrollY - (headerH() + 8);
+      window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' });
+    });
+  });
+
+  // Reveal on scroll (cards, experience items, contact cards)
+  if (!reduce && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(({isIntersecting, target}) => {
+        if (isIntersecting){ target.classList.add('reveal-in'); io.unobserve(target); }
+      });
+    }, { threshold: .1 });
+    document.querySelectorAll('.card, .exp .card, .contact .card').forEach((el, i) => {
+      el.classList.add('reveal-init');
+      el.style.transitionDelay = `${Math.min(i*40, 240)}ms`;
+      io.observe(el);
+    });
+  }
+
+  // 3D Tilt on cards (mouse / pointer)
+  const tiltTargets = document.querySelectorAll('.card');
+  tiltTargets.forEach(el => {
+    el.classList.add('use-tilt');
+    el.style.position = el.style.position || 'relative';
+    el.addEventListener('mousemove', (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;   // 0..1
+      const py = (e.clientY - r.top) / r.height;   // 0..1
+      const rx = (py - .5) * -6;                    // deg
+      const ry = (px - .5) *  6;
+      el.style.setProperty('--rx', `${rx}deg`);
+      el.style.setProperty('--ry', `${ry}deg`);
+    }, {passive:true});
+    ['mouseleave','blur'].forEach(type => el.addEventListener(type, () => {
+      el.style.setProperty('--rx','0deg'); el.style.setProperty('--ry','0deg');
+    }));
+  });
+
+  // Magnetic buttons
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.classList.add('magnet');
+    const strength = 8; // px
+    btn.addEventListener('mousemove', (e) => {
+      const r = btn.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width - .5) * strength;
+      const y = ((e.clientY - r.top) / r.height - .5) * strength;
+      btn.style.setProperty('--mx', `${x}px`);
+      btn.style.setProperty('--my', `${y}px`);
+    }, {passive:true});
+    ['mouseleave','blur'].forEach(t => btn.addEventListener(t, ()=>{
+      btn.style.setProperty('--mx','0px'); btn.style.setProperty('--my','0px');
+    }));
+  });
+
+  // Avatar parallax (very gentle)
+  const avatar = document.querySelector('.avatar-wrap');
+  if (avatar && !reduce){
+    const base = avatar.getBoundingClientRect().top + window.scrollY;
+    const onScroll = () => {
+      const dy = (window.scrollY - base) * 0.05;   // adjust feel
+      avatar.style.transform = `translateY(${Math.max(-18, Math.min(18, dy))}px)`;
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+  }
+
+  // Active section link highlight
+  const sectionIds = ['#work','#skills','#experience','#projects','#contact'];
+  const sections = sectionIds
+    .map(id => document.querySelector(id))
+    .filter(Boolean);
+  const navLinks = Array.from(document.querySelectorAll('.links a'))
+    .filter(a => sectionIds.includes(a.getAttribute('href')));
+
+  if ('IntersectionObserver' in window){
+    const sectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = `#${entry.target.id}`;
+        const link = navLinks.find(a => a.getAttribute('href') === id);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          navLinks.forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        }
+      });
+    }, {rootMargin: `-${headerH()+10}px 0px -70% 0px`, threshold: 0.01});
+    sections.forEach(s => sectionObserver.observe(s));
+  }
+})();
     /* ===== Data ===== */
     const info = {
       name: "Khwaja Mohd Taha",

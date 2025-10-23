@@ -1,469 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Khwaja Mohd Taha — Game Programmer</title>
-  <meta name="description" content="Portfolio of Khwaja Mohd Taha — Game Programmer / Software Engineer specializing in Unity, Unreal, and WebGL." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#07090c; --panel:#0d1016; --panel-2:#111622; --text:#eef3fb; --muted:#a7b2c5;
-      --brand:#66e3ff; --brand-2:#7aff9b; --ring:rgba(102,227,255,.45);
-      --card:#0b1018; --border:rgba(255,255,255,.09); --shadow:0 10px 30px rgba(0,0,0,.5);
-      --radius:18px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial,"Noto Sans","Apple Color Emoji","Noto Color Emoji",sans-serif}
-    a{color:var(--brand);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .container{width:min(1080px,92vw);margin:0 auto}
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Khwaja Mohd Taha — Game Programmer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;  /* page background */
+    --fg:#f5f5f5;  /* primary text */
+    --muted:#cfcfcf; /* secondary text */
+    --card:#111;   /* card background */
+    --ink:#fff;    /* “ink” color (white) */
+    --line:#2a2a2a;/* divider lines */
+    --radius:14px;
+    --pad:8vw;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Manrope,system-ui,sans-serif}
+  a{color:var(--fg);text-decoration:none;border-bottom:2px solid transparent}
+  a:hover{border-bottom-color:var(--fg)}
+  img{max-width:100%;display:block}
 
-    /* Header / Nav */
-    /* === Fixed Navbar === */
-header {
-  position: fixed;         /* stays in place even when scrolling */
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;           /* ensure it’s above everything else */
-  backdrop-filter: blur(10px);
-  background: linear-gradient(180deg, rgba(7,9,12,.9), rgba(7,9,12,.6));
-  border-bottom: 1px solid var(--border);
-  box-shadow: 0 4px 16px rgba(0,0,0,.45);
-}
+  /* ===== Fixed Navbar ===== */
+  header{
+    position:fixed; top:0; left:0; width:100%; z-index:1000;
+    background:var(--bg); border-bottom:2px solid var(--line);
+  }
+  nav{ display:flex; align-items:center; justify-content:space-between; padding:14px var(--pad); gap:16px; }
+  .brand{ display:flex; align-items:center; gap:14px; font-weight:800; }
+  .brand img{ width:48px; height:48px; border-radius:50%; }
+  .badge{ font-size:12px; padding:4px 8px; border:2px solid var(--ink); border-radius:999px; }
+  .links{ display:flex; align-items:center; gap:18px; }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:9px 14px; border:2px solid var(--ink); border-radius:var(--radius);
+    background:transparent; color:var(--fg); font-weight:700;
+    transition:transform .15s ease, background .15s ease, color .15s ease;
+  }
+  .btn:hover{ background:var(--ink); color:var(--bg); transform:translateY(-1px); }
+  .menu-btn{ display:none; border:2px solid var(--ink); background:transparent; color:var(--fg); border-radius:16px; padding:10px 12px; }
 
+  /* Drawer + backdrop */
+  .drawer{
+    position:fixed; inset:0 0 0 auto; width:82vw; max-width:360px;
+    background:var(--bg); border-left:2px solid var(--line);
+    transform:translateX(102%); transition:transform .25s ease; z-index:1001;
+    display:flex; flex-direction:column; gap:8px; padding:18px;
+  }
+  .drawer.open{ transform:translateX(0); }
+  .drawer a,.drawer .btn{ border:2px solid var(--ink); border-radius:var(--radius); padding:12px 12px; }
+  .drawer .close{ align-self:flex-end; border-radius:12px; }
+  .backdrop{
+    position:fixed; inset:0; z-index:1000; background:rgba(0,0,0,.45);
+    opacity:0; pointer-events:none; transition:opacity .2s ease;
+  }
+  .backdrop.show{ opacity:1; pointer-events:auto; }
+  body.menu-open{ overflow:hidden; }
 
-    
-    nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
-    .brand{display:flex;gap:12px;align-items:center;font-weight:800;letter-spacing:.3px}
-    .dot{width:12px;height:12px;border-radius:999px;background:conic-gradient(from 0deg,var(--brand),var(--brand-2),var(--brand));box-shadow:0 0 20px var(--ring)}
-    .badge{font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:999px;color:var(--muted)}
-    .links{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-    .btn{display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:12px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--border);box-shadow:var(--shadow);font-weight:600}
-    .btn:hover{transform:translateY(-1px);transition:.15s transform ease;text-decoration:none}
-    .btn-primary{background:linear-gradient(180deg,rgba(102,227,255,.18),rgba(122,255,155,.18));border-color:rgba(102,227,255,.35)}
-    .menu-btn{display:none;border:1px solid var(--border);background:var(--panel);border-radius:12px;padding:10px 12px;color:var(--text)}
+  /* Main */
+  main{ padding-top:96px; }
+  section{ padding:60px var(--pad); border-bottom:2px solid var(--line); }
+  h1,h2,h3{ margin:0 0 10px 0; line-height:1.1; }
+  h1{ font-size: clamp(28px, 5vw, 48px); }
+  h2{ font-size: clamp(20px, 3.4vw, 28px); }
+  h3{ font-size: 20px; }
+  p{ color:var(--muted); margin:8px 0 0 0; }
 
-    /* Drawer */
-    .drawer{position:fixed;inset:0 0 0 auto;width:82vw;max-width:360px;background:linear-gradient(180deg,var(--panel),var(--panel-2));border-left:1px solid var(--border);transform:translateX(102%);transition:transform .25s ease;z-index:60;display:flex;flex-direction:column;padding:18px}
-    .drawer.open{transform:translateX(0)}
-    .drawer a{padding:12px 10px;border-radius:10px;border:1px solid transparent;display:block}
-    .drawer a:hover{border-color:var(--border);background:var(--card);text-decoration:none}
-    .drawer .close{align-self:flex-end;margin:-6px -6px 12px}
-    /* Drawer + Backdrop layers */
-.drawer{
-  position: fixed; inset: 0 0 0 auto; width: 82vw; max-width: 360px;
-  background: linear-gradient(180deg, var(--panel), var(--panel-2));
-  border-left: 1px solid var(--border);
-  transform: translateX(102%);
-  transition: transform .25s ease;
-  z-index: 1001;                 /* above backdrop */
-  display: flex; flex-direction: column; padding: 18px;
-}
-.drawer.open{ transform: translateX(0); }
+  /* Hero layout + avatar */
+  .hero{
+    display:grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .avatar-wrap{
+    width: clamp(180px, 26vw, 320px);
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;                 /* <- crops the image to a perfect circle */
+  /*border: 4px solid var(--ink);*/
+  background: #0a0a0a;             /* same as page bg so edges blend */
+  display: grid;
+  place-items: center;
+  box-shadow: 0 6px 0 #000;
+  }
+  .avatar{ width: 100%;
+  height: 100%;
+  object-fit: cover;                /* cover fills the circle nicely */
+  border-radius: 50%;
+object-position: -5% -80%; }
+  .tag{ display:inline-block; border:2px solid var(--ink); border-radius:999px; padding:6px 10px; font-weight:800; letter-spacing:.2px; }
 
-.backdrop{
-  position: fixed; inset: 0; z-index: 1000;      /* below drawer, above page */
-  background: rgba(0,0,0,.35);
-  opacity: 0; pointer-events: none; transition: opacity .2s ease;
-}
-.backdrop.show{ opacity: 1; pointer-events: auto; }
+  /* Cards & grid */
+  .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:18px; }
+  .card{
+    grid-column:span 12; background:var(--card);
+    border:2px solid var(--ink); border-radius:var(--radius);
+    padding:18px; transition: background .15s ease, color .15s ease, transform .15s ease;
+  }
+  .card:hover{ background:var(--ink); color:var(--bg); transform: translateY(-2px); }
+  .row-2 > .card{ grid-column:span 6; }
+  .row-3 > .card{ grid-column:span 4; }
+  .meta{ color:var(--muted); font-size:13px; margin-top:4px; }
+  .list{ margin:8px 0 0 18px; color:var(--muted); }
 
-/* Ensure page scroll bars reappear when closed */
-body.menu-open{ overflow: hidden; }
+  /* Project thumbs (mono look) */
+  .thumb{
+    width:100%; border-radius:10px; margin-bottom:10px;
+    filter: grayscale(1) contrast(1.15) brightness(.95);
+    border:2px solid var(--ink);
+    transition: filter .2s ease;
+  }
+  .thumb:hover{ filter: grayscale(0) contrast(1) brightness(1); }
 
+  /* Contact layout */
+  .contact{ grid-template-columns: repeat(2,1fr); }
+  .contact .card{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+  }
+  .contact .card > div{ flex:1 1 auto; min-width:0; }
+  .contact a{ display:inline-block; max-width:100%; overflow-wrap:anywhere; word-break:break-word; }
 
-    /* Sections */
-    .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:34px;padding:56px 0 24px;align-items:center}
-    .hero h1{font-size:clamp(30px,6vw,58px);line-height:1.05;margin:0 0 8px 0}
-    .hero p{color:var(--muted);font-size:clamp(15px,2.2vw,18px);margin:0 0 20px 0}
-    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 26px}
-    .pill{font-size:13px;padding:8px 12px;border:1px solid var(--border);color:var(--muted);border-radius:999px;background:var(--card);backdrop-filter:blur(2px)}
-    .frame{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border);background:radial-gradient(1200px 600px at 20% 0%,rgba(102,227,255,.06),transparent 40%),radial-gradient(800px 400px at 100% 60%,rgba(122,255,155,.06),transparent 50%),var(--panel)}
-    .profile{aspect-ratio:4/5;width:100%;object-fit:cover;display:block;filter:saturate(1.05) contrast(1.02)}
+  /* Footer */
+  footer{ padding:26px var(--pad) 70px; color:#9a9a9a; text-align:center; }
 
-    section{padding:44px 0}
-    .grid{display:grid;gap:18px;grid-template-columns:repeat(12,1fr)}
-    .card{
-      grid-column:span 12;padding:18px;border:1px solid var(--border);border-radius:16px;
-      background:linear-gradient(180deg,rgba(102,227,255,.07),rgba(122,255,155,.03)),linear-gradient(180deg,var(--panel),var(--panel-2));
-      box-shadow:var(--shadow);
-      animation:rise .6s cubic-bezier(.2,.8,.2,1) both;
-      animation-delay:var(--d,0s);
-    }
-    
-    .card h3{margin:0 0 6px 0;font-size:20px}
-    .card p{margin:6px 0 0 0;color:var(--muted)}
-    .row-2>.card{grid-column:span 6}
-    .row-3>.card{grid-column:span 4}
-    .thumb{width:100%;border-radius:12px;margin-bottom:10px;display:block;transition:transform .3s, box-shadow .3s}
-    .thumb:hover{transform:scale(1.03);box-shadow:0 0 18px rgba(102,227,255,.3)}
-    .kicker{color:var(--brand);font-weight:700;letter-spacing:.2px;text-transform:uppercase;font-size:12px}
-    .title-row{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:10px}
-    .title-row a{font-size:14px;color:var(--muted)}
-    .exp{display:grid;gap:14px}
-    .exp-item{padding:16px;border:1px dashed var(--border);border-radius:14px;background:var(--card);animation:rise .6s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0s)}
-    .meta{color:var(--muted);font-size:13px;margin-top:4px}
-    .footer{padding:26px 0 70px;border-top:1px solid var(--border);color:var(--muted);text-align:center}
-    .contact{display:grid;gap:14px;grid-template-columns:repeat(2,1fr)}
-    .contact .card{display:flex;justify-content:space-between;align-items:center}
-    .contact a{font-weight:600}
-
-    @keyframes rise{from{opacity:.0;transform:translateY(10px)}to{opacity:1;transform:none}}
-
-    /* BG FX */
-    .bg-wrap{position:fixed;inset:0;z-index:-1;overflow:hidden}
-    #bg{width:100%;height:100%;display:block}
-    .glow{position:fixed;inset:auto -30% -40% auto;width:65vmax;height:65vmax;background:radial-gradient(closest-side,rgba(122,255,155,.08),transparent 70%);filter:blur(30px);pointer-events:none;z-index:-1;animation:float 14s ease-in-out infinite}
-    @keyframes float{0%,100%{transform:translate(0,0) rotate(0deg)}50%{transform:translate(-4%,-2%) rotate(6deg)}}
-
-    /* Mobile */
-    @media (max-width:900px){
-      .hero{grid-template-columns:1fr;padding-top:30px}
-      .row-2>.card,.row-3>.card{grid-column:span 12}
-      .contact{grid-template-columns:1fr}
-      .links{display:none}
-      .menu-btn{display:inline-flex}
-      .btn,.btn-primary{width:100%;justify-content:center}
-      nav{padding:12px 0}
-    }
-    .focus-ring:focus{outline:2px solid var(--ring);outline-offset:2px}
-  </style>
+  /* Responsive */
+  @media (max-width: 900px){
+    .links{ display:none; }
+    .menu-btn{ display:inline-flex; }
+    .hero{ grid-template-columns:1fr; justify-items:center; text-align:center; }
+    .hero .btn{ width:100%; justify-content:center; }
+    .row-2 > .card, .row-3 > .card{ grid-column:span 12; }
+    .contact{ grid-template-columns:1fr; }
+  }
+</style>
 </head>
 <body>
-  <!-- Animated Background -->
-  <div class="bg-wrap" aria-hidden="true">
-    <canvas id="bg"></canvas>
-    <div class="glow"></div>
-  </div>
-
+  <!-- Fixed Navbar -->
   <header>
-    <!-- Backdrop for tapping outside the drawer on mobile -->
-<div id="backdrop" class="backdrop" aria-hidden="true"></div>
-
-    <div class="container">
-      <nav aria-label="Main Navigation">
-        <div class="brand">
-          <span class="dot"></span>
-          <span>Khwaja Mohd Taha</span>
-          <span class="badge">Game Programmer</span>
+    <nav aria-label="Main Navigation">
+      <div class="brand">
+        <img src="assets/avatar.png" alt="Khwaja Mohd Taha avatar"/>
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <strong>Khwaja Mohd Taha</strong>
+            <span class="badge">Game Programmer</span>
+          </div>
         </div>
-
-        <div class="links" aria-label="Primary">
-          <a href="#skills">Skills</a>
-          <a href="#experience">Experience</a>
-          <a href="#projects">Projects</a>
-          <a class="btn btn-primary" href="assets/Taha_Resume_.pdf" download>Download Résumé</a>
-        </div>
-
-        <button class="menu-btn focus-ring" id="openMenu" aria-label="Open menu">☰</button>
-      </nav>
-    </div>
+      </div>
+      <div class="links">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        
+        <a class="btn" href="assets/Taha_Resume_.pdf" download>Download Résumé</a>
+      </div>
+      <button id="openMenu" class="menu-btn" aria-expanded="false" aria-label="Open menu">☰</button>
+    </nav>
   </header>
 
   <!-- Mobile Drawer -->
-  <aside class="drawer" id="drawer" aria-hidden="true">
-    <button class="btn close" id="closeMenu" aria-label="Close menu">✕</button>
-  
+  <aside id="drawer" class="drawer" aria-hidden="true">
+    <button id="closeMenu" class="btn close" aria-label="Close menu">✕</button>
+    <a href="#projects">Projects</a>
     <a href="#skills">Skills</a>
     <a href="#experience">Experience</a>
-    <a href="#projects">Projects</a>
-    <a class="btn btn-primary" href="assets/Taha_Resume_.pdf" download>⬇ Download Résumé</a>
+    
+    <a class="btn" href="assets/Taha_Resume_.pdf" download>⬇ Resume PDF</a>
     <a class="btn" href="#contact">✉ Contact</a>
   </aside>
+  <div id="backdrop" class="backdrop" aria-hidden="true"></div>
 
   <main id="root"></main>
 
-  <!-- React + JSX -->
+  <!-- React + Babel -->
   <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    /* ========= Site Data ========= */
+    /* ===== Data ===== */
     const info = {
       name: "Khwaja Mohd Taha",
       title: "Game Programmer / Software Engineer",
-      summary: `Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.`,
+      summary: "Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.",
       resumeHref: "assets/Taha_Resume_.pdf",
       socials: [
         { label: "GitHub", href: "https://github.com/KhwajaTaha" },
         { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
       ],
-      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
+      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817", "+46 764428529"] },
+      projects: [
+        { name:"Mirror World", tag:"2D Puzzle Platformer", blurb:"Can you hold them together? A dual-control reflection game for Android.", img:"assets/mirror.png", href:"https://imperfect-wizard.itch.io/mirror-world" },
+        { name:"Shores in the Abyss", tag:"3D FPS (Unity)", blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.", img:"assets/shores.png", href:"https://shariqusmani.itch.io/shores-in-the-abyss" },
+        { name:"An Unordinary Place", tag:"WebGL Narrative", blurb:"A short emotional story built for Brackeys Game Jam.", img:"assets/unordinary-place.png", href:"https://imperfect-wizard.itch.io/an-unordinary-place" },
+        { name:"Rider Santa", tag:"2D Racing", blurb:"Deliver gifts while racing across snowy hills — a festive Unity game!", img:"assets/Rider-santa.png", href:"https://imperfect-wizard.itch.io/rider-santa" }
+      ],
       skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
       experience: [
-        { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present", bullets:[
-          "Developed and maintained Lawyaltech.org; improved UX and performance.",
-          "Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.",
-          "Led a dev team; ensured security and code-quality compliance."
-        ]},
-        { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – Present", bullets:[
-          "Cross-functional collaboration to deliver seamless product support.",
-          "Identified process improvements and guided customers."
-        ]},
-        { role:"Indie Game Developer (Self-Employed)", company:"Steam & itch.io", period:"Mar 2023 – Present", bullets:[
-          "Designed and shipped multiple indie titles.",
-          "Built gameplay systems, UI and core mechanics in Unity & Godot."
-        ]},
-        { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023", bullets:[
-          "Contributed to Temple Run 2 systems and performance work.",
-          "Unity + Svelte + TypeScript; tests and perf benchmarks."
-        ]},
-        { role:"Game Programmer Intern", company:"Xansr Technologies", period:"Sep 2021 – Aug 2022", bullets:[
-          "Client projects in Unity3D and web engines.",
-          "C#, Phaser, TypeScript, Git, Svelte."
-        ]}
+        { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present",
+          bullets:["Developed and maintained Lawyaltech.org; improved UX and performance.","Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.","Led a dev team; ensured security and code-quality compliance."]},
+        { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – Present",
+          bullets:["Cross-functional collaboration to deliver seamless product support.","Identified process improvements and guided customers."]},
+        { role:"Indie Game Developer (Self-Employed)", company:"Steam & itch.io", period:"Mar 2023 – Present",
+          bullets:["Designed and shipped multiple indie titles.","Built gameplay systems, UI and core mechanics in Unity & Godot."]},
+        { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023",
+          bullets:["Contributed to Temple Run 2 systems and performance work.","Unity + Svelte + TypeScript; tests and perf benchmarks."]},
+        { role:"Game Programmer Intern", company:"Xansr Technologies", period:"Sep 2021 – Aug 2022",
+          bullets:["Client projects in Unity3D and web engines.","C#, Phaser, TypeScript, Git, Svelte."]}
       ],
-      projects: [
-        {
-          name:"Mirror World",
-          tag:"2D Puzzle Platformer",
-          blurb:"Can you hold them together? A dual-control reflection game for Android.",
-          img:"assets/mirror.png",
-          href:"https://imperfect-wizard.itch.io/mirror-world"
-        },
-        {
-          name:"Shores in the Abyss",
-          tag:"3D FPS (Unity)",
-          blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.",
-          img:"assets/shores.png",
-          href:"https://shariqusmani.itch.io/shores-in-the-abyss"
-        },
-        {
-          name:"An Unordinary Place",
-          tag:"WebGL Narrative",
-          blurb:"A short emotional story built for Brackeys Game Jam.",
-          img:"assets/unordinary-place.png",
-          href:"https://imperfect-wizard.itch.io/an-unordinary-place"
-        },
-        {
-          name:"Rider Santa",
-          tag:"2D Racing",
-          blurb:"Deliver gifts while racing across snowy hills — a festive Unity game!",
-          img:"assets/Rider-santa.png",
-          href:"https://imperfect-wizard.itch.io/rider-santa"
-        }
-      ]
+      
+      itchProfile: "https://imperfect-wizard.itch.io/"
     };
 
-    /* ========= Components ========= */
-    const Icon = ({children,label}) => <span aria-hidden="true" title={label} style={{fontWeight:700}}>{children}</span>;
+    /* ===== Components ===== */
+    const SectionTitle = ({title}) => (<h2 style={{marginBottom:'14px'}}>{title}</h2>);
 
     const Hero = () => (
       <section aria-label="Intro">
-        <div className="container hero">
-          <div>
-            <div className="kicker">Game Programmer</div>
-            <h1>{info.name}</h1>
-            <p>{info.summary}</p>
-
-            <div className="pill-row" id="skills">
-              {info.skills.slice(0, 10).map((s, i) => <span key={i} className="pill">{s}</span>)}
-              
-            </div>
-
-            <div className="links" role="group" aria-label="Primary actions" style={{display:'flex'}}>
-              <a className="btn btn-primary focus-ring" href={info.resumeHref} download><Icon>⬇</Icon> Download Résumé</a>
-              <a className="btn focus-ring" href="#contact"><Icon>✉</Icon> Contact</a>
-            </div>
+        <div className="hero">
+          <div className="avatar-wrap">
+            <img src="assets/avatar.png" alt="Black & white avatar of Khwaja Mohd Taha" className="avatar" decoding="async" loading="eager"/>
           </div>
-
-          <div className="frame" aria-hidden="true">
-            {/* Replace with your photo or remove the <img> */}
-            <img className="profile" src="assets/profile.jpeg" alt="Portrait of Khwaja Mohd Taha" />
+          <div>
+            <span className="tag">Game Programmer</span>
+            <h1 style={{marginTop:'10px'}}>{info.name}</h1>
+            <p style={{marginTop:'6px'}}>{info.summary}</p>
+            <div style={{display:'flex', gap:'12px', flexWrap:'wrap', marginTop:'14px'}}>
+              <a className="btn" href={info.resumeHref} download>⬇ Download Résumé</a>
+              <a className="btn" href="#contact">✉ Contact</a>
+            </div>
           </div>
         </div>
       </section>
     );
 
-    const SectionTitle = ({id, title, href}) => (
-      <div className="title-row">
-        <h2 id={id} style={{margin:"0 0 6px 0"}}>{title}</h2>
-        {href && <a href={href} aria-label={`${title} link`}>View All</a>}
-      </div>
+      const Projects = () => (
+      <section id="projects" aria-label="More Projects">
+        <SectionTitle title="More Projects"/>
+        <div className="grid row-2">
+          {info.projects.map((p, i)=>(
+            <article className="card" key={i}>
+              <a href={p.href} target="_blank" rel="noopener">
+                <img className="thumb" src={p.img} alt={`${p.name} cover`}/>
+              </a>
+              <h3 style={{marginTop:'4px'}}><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
+              <div className="meta">{p.tag}</div>
+              <p>{p.blurb}</p>
+            </article>
+          ))}
+        </div>
+      </section>
     );
 
-   
-
     const Skills = () => (
-      <section aria-label="Skills">
-        <div className="container">
-          <SectionTitle title="Skills" />
-          <div className="grid row-3">
-            {info.skills.map((s, i)=>(
-              <div className="card" key={i} style={{'--d': `${i * 0.02}s`}}>
-                <strong>{s}</strong>
-              </div>
-            ))}
-          </div>
+      <section id="skills" aria-label="Skills">
+        <SectionTitle title="Skills"/>
+        <div className="grid row-3">
+          {info.skills.map((s, i)=>(
+            <div className="card" key={i}><strong>{s}</strong></div>
+          ))}
         </div>
       </section>
     );
 
     const Experience = () => (
       <section id="experience" aria-label="Experience">
-        <div className="container">
-          <SectionTitle title="Experience" />
-          <div className="exp">
-            {info.experience.map((e, i)=>(
-              <article className="exp-item" key={i} style={{'--d': `${i * 0.06}s`}}>
-                <h4>{e.role} — {e.company}</h4>
-                <div className="meta">{e.period}</div>
-                <ul style={{margin:"10px 0 0 20px"}}>
-                  {e.bullets.map((b, j)=><li key={j}>{b}</li>)}
-                </ul>
-              </article>
-            ))}
-          </div>
+        <SectionTitle title="Experience"/>
+        <div className="grid">
+          {info.experience.map((e, i)=>(
+            <article className="card" key={i}>
+              <h3>{e.role} — {e.company}</h3>
+              <div className="meta">{e.period}</div>
+              <ul className="list">{e.bullets.map((b, j)=><li key={j}>{b}</li>)}</ul>
+            </article>
+          ))}
         </div>
       </section>
     );
 
-    const Projects = () => (
-      <section id="projects" aria-label="More Projects">
-        <div className="container">
-          <SectionTitle title="More Projects" />
-          <div className="grid row-2">
-            {info.projects.map((p, i)=>(
-              <article className="card" key={i} style={{'--d': `${i * 0.05}s`}}>
-                <a href={p.href} target="_blank" rel="noopener">
-                  <img className="thumb" src={p.img} alt={`${p.name} cover`} />
-                </a>
-                <h3><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
-                <div className="meta">{p.tag}</div>
-                <p>{p.blurb}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-    );
+  
 
     const Contact = () => (
-  <section id="contact" aria-label="Contact & Links">
-    <div className="container">
-      <SectionTitle title="Contact & Links" />
-      <div className="grid contact">
-        <div className="card" style={{'--d': '0s'}}>
-          <div>
-            <div className="kicker">Email</div>
-            <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
-          </div>
-          <span aria-hidden="true">✉</span>
-        </div>
-
-        <div className="card" style={{'--d': '.05s'}}>
-          <div>
-            <div className="kicker">Phone</div>
-            <div className="meta">{info.contact.phones.join(" · ")}</div>
-          </div>
-          <span aria-hidden="true">📱</span>
-        </div>
-
-        {info.socials.map((s, i)=>(
-          <div className="card" key={i} style={{'--d': `${(i+2)*0.05}s`}}>
+      <section id="contact" aria-label="Contact & Links">
+        <SectionTitle title="Contact & Links"/>
+        <div className="grid contact">
+          <div className="card">
             <div>
-              <div className="kicker">{s.label}</div>
-              <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
+              <div style={{fontWeight:800, fontSize:'12px'}}>EMAIL</div>
+              <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
             </div>
-            <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
+            <span aria-hidden="true">✉</span>
           </div>
-        ))}
-
-        <div className="card" style={{'--d': '.25s'}}>
-          <div>
-            <div className="kicker">Résumé</div>
-            <a href={info.resumeHref} download>Download PDF</a>
+          <div className="card">
+            <div>
+              <div style={{fontWeight:800, fontSize:'12px'}}>PHONE</div>
+              <div className="meta">{info.contact.phones.join(" · ")}</div>
+            </div>
+            <span aria-hidden="true">📱</span>
           </div>
-          <span aria-hidden="true">⬇</span>
-        </div>
-
-        {/* ✅ MOVE THIS CARD INSIDE THE GRID */}
-        <div className="card" style={{'--d': '.3s'}}>
-          <div>
-            <div className="kicker">Itch.io Profile</div>
-            <a href="https://imperfect-wizard.itch.io/" target="_blank" rel="noopener">
-              https://imperfect-wizard.itch.io/
-            </a>
+          {info.socials.map((s, i)=>(
+            <div className="card" key={i}>
+              <div>
+                <div style={{fontWeight:800, fontSize:'12px'}}>{s.label.toUpperCase()}</div>
+                <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
+              </div>
+              <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
+            </div>
+          ))}
+          <div className="card">
+            <div>
+              <div style={{fontWeight:800, fontSize:'12px'}}>RÉSUMÉ</div>
+              <a href={info.resumeHref} download>Download PDF</a>
+            </div>
+            <span aria-hidden="true">⬇</span>
           </div>
-          <span aria-hidden="true">🎮</span>
+          <div className="card">
+            <div>
+              <div style={{fontWeight:800, fontSize:'12px'}}>ITCH.IO PROFILE</div>
+              <a href="https://imperfect-wizard.itch.io/" target="_blank" rel="noopener">https://imperfect-wizard.itch.io/</a>
+            </div>
+            <span aria-hidden="true">🎮</span>
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
-);
-
-
-    const Footer = () => (
-      <footer className="footer">
-        <div className="container">
-          © {new Date().getFullYear()} {info.name}. Built with React (CDN), HTML & CSS.
-        </div>
-      </footer>
+      </section>
     );
 
-    const App = () => (<><Hero/><Skills/><Experience/><Projects/><Contact/><Footer/></>);
+    const Footer = () => (
+      <footer>© {new Date().getFullYear()} {info.name}. Monochrome portfolio — built with HTML, CSS & React.</footer>
+    );
+
+    const App = () => (<><Hero/><Projects/><Skills/><Experience/><Contact/><Footer/></>);
 
     /* Mount */
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
 
-    /* Drawer */
-   /* === Drawer (Mobile Nav) — Scroll Fix === */
-const drawer = document.getElementById('drawer');
-const openBtn = document.getElementById('openMenu');
-const closeBtn = document.getElementById('closeMenu');
-
-function toggleDrawer(force) {
-  const isOpen = force !== undefined ? force : !drawer.classList.contains('open');
-  drawer.classList.toggle('open', isOpen);
-  drawer.setAttribute('aria-hidden', !isOpen);
-  document.body.style.overflow = isOpen ? 'hidden' : 'auto'; // ✅ ensures scroll always resets properly
-}
-
-// Open/Close controls
-openBtn.addEventListener('click', () => toggleDrawer(true));
-closeBtn.addEventListener('click', () => toggleDrawer(false));
-
-// Clicking any link inside drawer closes it and restores scroll
-drawer.querySelectorAll('a').forEach(a =>
-  a.addEventListener('click', () => toggleDrawer(false))
-);
-
-// Optional: close on Escape key
-window.addEventListener('keydown', e => {
-  if (e.key === 'Escape') toggleDrawer(false);
-});
-
-
-    /* Animated background (lightweight, mobile-friendly) */
-    const canvas = document.getElementById('bg');
-    const ctx = canvas.getContext('2d', { alpha: true });
-    let dpr = Math.min(2, window.devicePixelRatio || 1);
-    let w, h; const particles=[]; const MAX = matchMedia('(max-width: 900px)').matches ? 24 : 40;
-
-    function resize(){ w = canvas.width = Math.floor(innerWidth * dpr); h = canvas.height = Math.floor(innerHeight * dpr); canvas.style.width = innerWidth + 'px'; canvas.style.height = innerHeight + 'px'; }
-    addEventListener('resize', resize); resize();
-
-    function rand(a,b){return a + Math.random()*(b-a)}
-    function spawn(){ const s=rand(.08,.35), r=rand(80,220)*dpr; return {x:rand(0,w),y:rand(0,h),vx:rand(-s,s),vy:rand(-s,s),r,t:rand(0,6.28),hs:Math.random()}; }
-    for(let i=0;i<MAX;i++) particles.push(spawn());
-
-    function draw(){
-      ctx.clearRect(0,0,w,h); ctx.globalCompositeOperation='lighter';
-      for(const p of particles){
-        p.t += .003; p.x += p.vx + Math.cos(p.t)*.3; p.y += p.vy + Math.sin(p.t*1.3)*.25;
-        if(p.x<-p.r)p.x=w+p.r; if(p.x>w+p.r)p.x=-p.r; if(p.y<-p.r)p.y=h+p.r; if(p.y>h+p.r)p.y=-p.r;
-        const g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
-        g.addColorStop(0,`hsla(${200+p.hs*80},100%,60%,.06)`); g.addColorStop(1,'rgba(0,0,0,0)');
-        ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,6.283); ctx.fill();
-      }
-      ctx.globalCompositeOperation='source-over'; requestAnimationFrame(draw);
+    /* ===== Drawer toggle (robust) ===== */
+    const drawer   = document.getElementById('drawer');
+    const backdrop = document.getElementById('backdrop');
+    const openBtn  = document.getElementById('openMenu');
+    const closeBtn = document.getElementById('closeMenu');
+    function setDrawer(open){
+      drawer.classList.toggle('open', open);
+      backdrop.classList.toggle('show', open);
+      document.body.classList.toggle('menu-open', open);
+      if (openBtn) openBtn.setAttribute('aria-expanded', String(open));
+      drawer.setAttribute('aria-hidden', String(!open));
     }
-    draw();
+    if (openBtn) openBtn.addEventListener('click', ()=> setDrawer(!drawer.classList.contains('open')));
+    if (closeBtn) closeBtn.addEventListener('click', ()=> setDrawer(false));
+    if (backdrop) backdrop.addEventListener('click', ()=> setDrawer(false));
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> setDrawer(false)));
+    window.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(false); });
   </script>
 </body>
 </html>

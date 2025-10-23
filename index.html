@@ -100,12 +100,28 @@ object-position: -5% -80%; }
     border:2px solid var(--ink); border-radius:var(--radius);
     padding:18px; transition: background .15s ease, color .15s ease, transform .15s ease;
   }
-  .card:hover{ background:var(--ink); color:var(--bg); transform: translateY(-2px); }
+  .card:hover{ background: var(--ink);        /* white background */
+  color: var(--bg);              /* dark text */
+  transform: translateY(-2px); }
   .row-2 > .card{ grid-column:span 6; }
   .row-3 > .card{ grid-column:span 4; }
   .meta{ color:var(--muted); font-size:13px; margin-top:4px; }
   .list{ margin:8px 0 0 18px; color:var(--muted); }
 
+/* Ensure nested text & headings also flip */
+.card:hover h3,
+.card:hover p,
+.card:hover .meta,
+.card:hover li,
+.card:hover a {
+  color: var(--bg);
+  border-bottom-color: var(--bg); /* for links underline hover */
+}
+
+/* Optional: tone down bright emoji/icons */
+.card:hover span[aria-hidden="true"] {
+  filter: invert(1); /* flips icon color for contrast */
+}
   /* Project thumbs (mono look) */
   .thumb{
     width:100%; border-radius:10px; margin-bottom:10px;

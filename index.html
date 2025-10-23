@@ -340,7 +340,7 @@ object-position: -5% -80%; }
         { label: "GitHub", href: "https://github.com/KhwajaTaha" },
         { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
       ],
-      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817", "+46 764428529"] },
+      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
       projects: [
         { name:"Mirror World", tag:"2D Puzzle Platformer", blurb:"Can you hold them together? A dual-control reflection game for Android.", img:"assets/mirror.png", href:"https://imperfect-wizard.itch.io/mirror-world" },
         { name:"Shores in the Abyss", tag:"3D FPS (Unity)", blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.", img:"assets/shores.png", href:"https://shariqusmani.itch.io/shores-in-the-abyss" },
@@ -353,7 +353,7 @@ object-position: -5% -80%; }
           bullets:["Developed and maintained Lawyaltech.org; improved UX and performance.","Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.","Led a dev team; ensured security and code-quality compliance."]},
         { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – Present",
           bullets:["Cross-functional collaboration to deliver seamless product support.","Identified process improvements and guided customers."]},
-        { role:"Indie Game Developer (Self-Employed)", company:"Steam & itch.io", period:"Mar 2023 – Present",
+        { role:"Indie Game Developer (Self-Employed)", company:"Itch.io", period:"Mar 2023 – Present",
           bullets:["Designed and shipped multiple indie titles.","Built gameplay systems, UI and core mechanics in Unity & Godot."]},
         { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023",
           bullets:["Contributed to Temple Run 2 systems and performance work.","Unity + Svelte + TypeScript; tests and perf benchmarks."]},
@@ -388,7 +388,7 @@ object-position: -5% -80%; }
 
       const Projects = () => (
       <section id="projects" aria-label="More Projects">
-        <SectionTitle title="More Projects"/>
+        <SectionTitle title="Projects"/>
         <div className="grid row-2">
           {info.projects.map((p, i)=>(
             <article className="card" key={i}>
@@ -478,7 +478,7 @@ object-position: -5% -80%; }
     );
 
     const Footer = () => (
-      <footer>© {new Date().getFullYear()} {info.name}. Monochrome portfolio — built with HTML, CSS & React.</footer>
+      <footer>© {new Date().getFullYear()} {info.name}. Built with HTML, CSS & React.</footer>
     );
 
     const App = () => (<><Hero/><Projects/><Skills/><Experience/><Contact/><Footer/></>);

@@ -8,12 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0a0a;  /* page background */
-    --fg:#f5f5f5;  /* primary text */
-    --muted:#cfcfcf; /* secondary text */
-    --card:#111;   /* card background */
-    --ink:#fff;    /* “ink” color (white) */
-    --line:#2a2a2a;/* divider lines */
+    --bg:#0a0a0a;
+    --fg:#f5f5f5;
+    --muted:#cfcfcf;
+    --card:#111;
+    --ink:#fff;
+    --line:#2a2a2a;
     --radius:14px;
     --pad:8vw;
   }
@@ -68,7 +68,7 @@
   h3{ font-size: 20px; }
   p{ color:var(--muted); margin:8px 0 0 0; }
 
-  /* Hero layout + avatar */
+  /* Hero */
   .hero{
     display:grid;
     grid-template-columns: 1.1fr .9fr;
@@ -79,12 +79,12 @@
     width: clamp(180px, 26vw, 320px);
     aspect-ratio: 1 / 1;
     border-radius: 50%;
-    overflow: hidden;                 /* crops the image to a perfect circle */
+    overflow: hidden;
     background: #0a0a0a;
     display: grid;
     place-items: center;
     box-shadow: 0 6px 0 #000;
-    will-change:transform; /* Avatar gentle parallax */
+    will-change:transform;
   }
   .avatar{
     width: 100%;
@@ -95,7 +95,7 @@
   }
   .tag{ display:inline-block; border:2px solid var(--ink); border-radius:999px; padding:6px 10px; font-weight:800; letter-spacing:.2px; }
 
-  /* Cards & grid */
+  /* Grid + cards */
   .grid{ display:grid; grid-template-columns: repeat(12, 1fr); gap:18px; }
   .card{
     grid-column:span 12; background:var(--card);
@@ -108,7 +108,6 @@
   .meta{ color:var(--muted); font-size:13px; margin-top:4px; }
   .list{ margin:8px 0 0 18px; color:var(--muted); }
 
-  /* Ensure nested text & headings also flip */
   .card:hover h3,
   .card:hover p,
   .card:hover .meta,
@@ -119,7 +118,7 @@
   }
   .card:hover span[aria-hidden="true"] { filter: invert(1); }
 
-  /* Project thumbs (mono look) */
+  /* Thumbs (default projects look) */
   .thumb{
     width:100%; border-radius:10px; margin-bottom:10px;
     filter: grayscale(1) contrast(1.15) brightness(.95);
@@ -139,23 +138,13 @@
   /* Footer */
   footer{ padding:26px var(--pad) 70px; color:#9a9a9a; text-align:center; }
 
-  /* Responsive */
-  @media (max-width: 900px){
-    .links{ display:none; }
-    .menu-btn{ display:inline-flex; }
-    .hero{ grid-template-columns:1fr; justify-items:center; text-align:center; }
-    .hero .btn{ width:100%; justify-content:center; }
-    .row-2 > .card, .row-3 > .card{ grid-column:span 12; }
-    .contact{ grid-template-columns:1fr; }
-  }
-
   /* ========= Motion primitives ========= */
   @media (prefers-reduced-motion:no-preference){
     .reveal-init{opacity:0; transform:translateY(14px) scale(.98); will-change:opacity,transform}
     .reveal-in{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1)}
   }
 
-  /* Subtle 3D tilt on hover/move (cards) */
+  /* 3D tilt */
   .use-tilt{transform-style:preserve-3d; position:relative}
   .use-tilt::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:.0; transition:opacity .25s}
   .use-tilt:hover::after{opacity:.12; box-shadow:0 10px 40px rgba(255,255,255,.08) inset}
@@ -172,6 +161,37 @@
 
   /* Active nav link */
   .links a.active{border-bottom-color:var(--fg)}
+
+  /* ✅ Spotlight: make card smaller on PC + show full image (NO CROP) */
+  #spotlight .spotlight-grid{
+    grid-template-columns: repeat(12, 1fr);
+    justify-items: center;
+  }
+  #spotlight .spotlight-grid > .card{
+    grid-column: span 6;
+    max-width: 560px;
+  }
+  #spotlight .spotlight-grid .thumb{
+    width: 100%;
+    height: auto;
+    max-height: none;
+    object-fit: contain;      /* key: no cropping */
+    background: #0a0a0a;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px){
+    .links{ display:none; }
+    .menu-btn{ display:inline-flex; }
+    .hero{ grid-template-columns:1fr; justify-items:center; text-align:center; }
+    .hero .btn{ width:100%; justify-content:center; }
+    .row-2 > .card, .row-3 > .card{ grid-column:span 12; }
+    .contact{ grid-template-columns:1fr; }
+
+    /* spotlight becomes full width on mobile */
+    #spotlight .spotlight-grid > .card{ grid-column: span 12; max-width: 100%; }
+    #spotlight .spotlight-grid .thumb{ max-height: none; }
+  }
 </style>
 </head>
 <body>
@@ -191,7 +211,6 @@
       <div class="links">
         <a href="#spotlight">Spotlight</a>
         <a href="#projects">Projects</a>
-        
         <a href="#skills">Skills</a>
         <a href="#experience">Experience</a>
         <a class="btn" href="assets/Taha_Resumegd.pdf" download>Download Résumé</a>
@@ -206,7 +225,6 @@
     <button id="closeMenu" class="btn close" aria-label="Close menu">✕</button>
     <a href="#spotlight">Spotlight</a>
     <a href="#projects">Projects</a>
-    
     <a href="#skills">Skills</a>
     <a href="#experience">Experience</a>
     <a class="btn" href="assets/Taha_Resumegd.pdf" download>⬇ Resume PDF</a>
@@ -242,7 +260,7 @@
     });
   });
 
-  // Reveal on scroll (cards, experience items, contact cards)
+  // Reveal on scroll (cards)
   if (!reduce && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(({isIntersecting, target}) => {
@@ -250,7 +268,6 @@
       });
     }, { threshold: .1 });
 
-    // We attach after React renders (below), so we re-run a little later too.
     window.__revealInit = () => {
       document.querySelectorAll('.card, .exp .card, .contact .card').forEach((el, i) => {
         if (el.classList.contains('reveal-in') || el.classList.contains('reveal-init')) return;
@@ -346,7 +363,7 @@ const info = {
     { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
   ],
   contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
- // ✅ NEW: Spotlight / Shoutout section
+
   spotlight: [
     {
       title: "Babylon.js Shoutout (X/Twitter)",
@@ -356,9 +373,10 @@ const info = {
       href: "https://x.com/babylonjs/status/1971983597872558324?s=20",
       cta: "View the post",
       badge: "Featured",
-      img: "assets/image.png" 
+      img: "assets/image.png"
     }
   ],
+
   projects: [
     {
       name: "Toon Shader",
@@ -397,9 +415,8 @@ const info = {
     }
   ],
 
- 
-
   skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
+
   experience: [
     { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present",
       bullets:["Developed and maintained Lawyaltech.org; improved UX and performance.","Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.","Led a dev team; ensured security and code-quality compliance."]},
@@ -438,6 +455,34 @@ const Hero = () => (
   </section>
 );
 
+const Spotlight = () => (
+  <section id="spotlight" aria-label="Spotlight">
+    <SectionTitle title="Spotlight"/>
+    <div className="grid spotlight-grid">
+      {info.spotlight.map((s, i)=>(
+        <article className="card" key={i}>
+          <div style={{display:'flex', justifyContent:'space-between', gap:'12px', flexWrap:'wrap', alignItems:'baseline'}}>
+            <h3 style={{margin:0}}>{s.title}</h3>
+            <span className="tag" style={{fontSize:'12px'}}>{s.badge}</span>
+          </div>
+          <div className="meta">{s.org} · {s.date}</div>
+
+          {s.img && (
+            <a href={s.href} target="_blank" rel="noopener">
+              <img className="thumb" src={s.img} alt={`${s.title} preview`} />
+            </a>
+          )}
+
+          <p>{s.blurb}</p>
+          <div style={{marginTop:'12px'}}>
+            <a className="btn" href={s.href} target="_blank" rel="noopener">🔗 {s.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+);
+
 const Projects = () => (
   <section id="projects" aria-label="More Projects">
     <SectionTitle title="Projects"/>
@@ -450,34 +495,6 @@ const Projects = () => (
           <h3 style={{marginTop:'4px'}}><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
           <div className="meta">{p.tag}</div>
           <p>{p.blurb}</p>
-        </article>
-      ))}
-    </div>
-  </section>
-);
-
-// ✅ NEW: Spotlight section component
-const Spotlight = () => (
-  <section id="spotlight" aria-label="Spotlight">
-    <SectionTitle title="Spotlight"/>
-    <div className="grid">
-      {info.spotlight.map((s, i)=>(
-        <article className="card" key={i}>
-          <div style={{display:'flex', justifyContent:'space-between', gap:'12px', flexWrap:'wrap', alignItems:'baseline'}}>
-            <h3 style={{margin:0}}>{s.title}</h3>
-            <span className="tag" style={{fontSize:'12px'}}>{s.badge}</span>
-          </div>
-          <div className="meta">{s.org} · {s.date}</div>
-          {s.img && (
-  <a href={s.href} target="_blank" rel="noopener">
-    <img className="thumb" src={s.img} alt={`${s.title} preview`} />
-  </a>
-)}
-
-          <p>{s.blurb}</p>
-          <div style={{marginTop:'12px'}}>
-            <a className="btn" href={s.href} target="_blank" rel="noopener">🔗 {s.cta}</a>
-          </div>
         </article>
       ))}
     </div>
@@ -569,14 +586,14 @@ const App = () => (<><Hero/><Spotlight/><Projects/><Skills/><Experience/><Contac
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
 
-/* After render: init reveal/tilt/magnet (so spotlight cards also get effects) */
+/* After render: init reveal/tilt/magnet */
 setTimeout(() => {
   window.__revealInit && window.__revealInit();
   window.__tiltInit && window.__tiltInit();
   window.__magnetInit && window.__magnetInit();
 }, 0);
 
-/* ===== Drawer toggle (robust) ===== */
+/* ===== Drawer toggle ===== */
 const drawer   = document.getElementById('drawer');
 const backdrop = document.getElementById('backdrop');
 const openBtn  = document.getElementById('openMenu');

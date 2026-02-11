@@ -77,20 +77,22 @@
   }
   .avatar-wrap{
     width: clamp(180px, 26vw, 320px);
-  aspect-ratio: 1 / 1;
-  border-radius: 50%;
-  overflow: hidden;                 /* <- crops the image to a perfect circle */
-  /*border: 4px solid var(--ink);*/
-  background: #0a0a0a;             /* same as page bg so edges blend */
-  display: grid;
-  place-items: center;
-  box-shadow: 0 6px 0 #000;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    overflow: hidden;                 /* crops the image to a perfect circle */
+    background: #0a0a0a;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 6px 0 #000;
+    will-change:transform; /* Avatar gentle parallax */
   }
-  .avatar{ width: 100%;
-  height: 100%;
-  object-fit: cover;                /* cover fills the circle nicely */
-  border-radius: 50%;
-object-position: -5% -80%; }
+  .avatar{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    object-position: -5% -80%;
+  }
   .tag{ display:inline-block; border:2px solid var(--ink); border-radius:999px; padding:6px 10px; font-weight:800; letter-spacing:.2px; }
 
   /* Cards & grid */
@@ -100,28 +102,23 @@ object-position: -5% -80%; }
     border:2px solid var(--ink); border-radius:var(--radius);
     padding:18px; transition: background .15s ease, color .15s ease, transform .15s ease;
   }
-  .card:hover{ background: var(--ink);        /* white background */
-  color: var(--bg);              /* dark text */
-  transform: translateY(-2px); }
+  .card:hover{ background: var(--ink); color: var(--bg); transform: translateY(-2px); }
   .row-2 > .card{ grid-column:span 6; }
   .row-3 > .card{ grid-column:span 4; }
   .meta{ color:var(--muted); font-size:13px; margin-top:4px; }
   .list{ margin:8px 0 0 18px; color:var(--muted); }
 
-/* Ensure nested text & headings also flip */
-.card:hover h3,
-.card:hover p,
-.card:hover .meta,
-.card:hover li,
-.card:hover a {
-  color: var(--bg);
-  border-bottom-color: var(--bg); /* for links underline hover */
-}
+  /* Ensure nested text & headings also flip */
+  .card:hover h3,
+  .card:hover p,
+  .card:hover .meta,
+  .card:hover li,
+  .card:hover a {
+    color: var(--bg);
+    border-bottom-color: var(--bg);
+  }
+  .card:hover span[aria-hidden="true"] { filter: invert(1); }
 
-/* Optional: tone down bright emoji/icons */
-.card:hover span[aria-hidden="true"] {
-  filter: invert(1); /* flips icon color for contrast */
-}
   /* Project thumbs (mono look) */
   .thumb{
     width:100%; border-radius:10px; margin-bottom:10px;
@@ -153,32 +150,28 @@ object-position: -5% -80%; }
   }
 
   /* ========= Motion primitives ========= */
-@media (prefers-reduced-motion:no-preference){
-  .reveal-init{opacity:0; transform:translateY(14px) scale(.98); will-change:opacity,transform}
-  .reveal-in{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1)}
-}
+  @media (prefers-reduced-motion:no-preference){
+    .reveal-init{opacity:0; transform:translateY(14px) scale(.98); will-change:opacity,transform}
+    .reveal-in{opacity:1; transform:none; transition:opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1)}
+  }
 
-/* Subtle 3D tilt on hover/move (cards, project thumbs) */
-.use-tilt{transform-style:preserve-3d}
-.use-tilt::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:.0; transition:opacity .25s}
-.use-tilt:hover::after{opacity:.12; box-shadow:0 10px 40px rgba(255,255,255,.08) inset}
-.use-tilt{--rx:0deg; --ry:0deg}
-.use-tilt:hover{transform:translateY(-2px) rotateX(var(--rx)) rotateY(var(--ry))}
+  /* Subtle 3D tilt on hover/move (cards) */
+  .use-tilt{transform-style:preserve-3d; position:relative}
+  .use-tilt::after{content:""; position:absolute; inset:-1px; border-radius:inherit; pointer-events:none; opacity:.0; transition:opacity .25s}
+  .use-tilt:hover::after{opacity:.12; box-shadow:0 10px 40px rgba(255,255,255,.08) inset}
+  .use-tilt{--rx:0deg; --ry:0deg}
+  .use-tilt:hover{transform:translateY(-2px) rotateX(var(--rx)) rotateY(var(--ry))}
 
-/* Magnetic buttons */
-.btn.magnet{--mx:0px; --my:0px; transform:translate(var(--mx),var(--my)); transition:transform .12s ease}
-.btn.magnet:active{transform:translate(calc(var(--mx)*.4),calc(var(--my)*.4)) scale(.98)}
+  /* Magnetic buttons */
+  .btn.magnet{--mx:0px; --my:0px; transform:translate(var(--mx),var(--my)); transition:transform .12s ease}
+  .btn.magnet:active{transform:translate(calc(var(--mx)*.4),calc(var(--my)*.4)) scale(.98)}
 
-/* Animated underline for links inside cards */
-.card a{background-image:linear-gradient(currentColor,currentColor); background-repeat:no-repeat; background-size:0% 2px; background-position:0 100%; transition:background-size .25s ease}
-.card a:hover{background-size:100% 2px}
+  /* Animated underline for links inside cards */
+  .card a{background-image:linear-gradient(currentColor,currentColor); background-repeat:no-repeat; background-size:0% 2px; background-position:0 100%; transition:background-size .25s ease}
+  .card a:hover{background-size:100% 2px}
 
-/* Avatar gentle parallax */
-.avatar-wrap{will-change:transform}
-
-/* Active nav link */
-.links a.active{border-bottom-color:var(--fg)}
-
+  /* Active nav link */
+  .links a.active{border-bottom-color:var(--fg)}
 </style>
 </head>
 <body>
@@ -194,13 +187,16 @@ object-position: -5% -80%; }
           </div>
         </div>
       </div>
+
       <div class="links">
+        <a href="#spotlight">Spotlight</a>
         <a href="#projects">Projects</a>
+        
         <a href="#skills">Skills</a>
         <a href="#experience">Experience</a>
-        
         <a class="btn" href="assets/Taha_Resumegd.pdf" download>Download Résumé</a>
       </div>
+
       <button id="openMenu" class="menu-btn" aria-expanded="false" aria-label="Open menu">☰</button>
     </nav>
   </header>
@@ -208,10 +204,11 @@ object-position: -5% -80%; }
   <!-- Mobile Drawer -->
   <aside id="drawer" class="drawer" aria-hidden="true">
     <button id="closeMenu" class="btn close" aria-label="Close menu">✕</button>
+    <a href="#spotlight">Spotlight</a>
     <a href="#projects">Projects</a>
+    
     <a href="#skills">Skills</a>
     <a href="#experience">Experience</a>
-    
     <a class="btn" href="assets/Taha_Resumegd.pdf" download>⬇ Resume PDF</a>
     <a class="btn" href="#contact">✉ Contact</a>
   </aside>
@@ -225,7 +222,6 @@ object-position: -5% -80%; }
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-
 /* ========= Motion & Interactions ========= */
 (() => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -253,54 +249,64 @@ object-position: -5% -80%; }
         if (isIntersecting){ target.classList.add('reveal-in'); io.unobserve(target); }
       });
     }, { threshold: .1 });
-    document.querySelectorAll('.card, .exp .card, .contact .card').forEach((el, i) => {
-      el.classList.add('reveal-init');
-      el.style.transitionDelay = `${Math.min(i*40, 240)}ms`;
-      io.observe(el);
-    });
+
+    // We attach after React renders (below), so we re-run a little later too.
+    window.__revealInit = () => {
+      document.querySelectorAll('.card, .exp .card, .contact .card').forEach((el, i) => {
+        if (el.classList.contains('reveal-in') || el.classList.contains('reveal-init')) return;
+        el.classList.add('reveal-init');
+        el.style.transitionDelay = `${Math.min(i*40, 240)}ms`;
+        io.observe(el);
+      });
+    };
   }
 
-  // 3D Tilt on cards (mouse / pointer)
-  const tiltTargets = document.querySelectorAll('.card');
-  tiltTargets.forEach(el => {
-    el.classList.add('use-tilt');
-    el.style.position = el.style.position || 'relative';
-    el.addEventListener('mousemove', (e) => {
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width;   // 0..1
-      const py = (e.clientY - r.top) / r.height;   // 0..1
-      const rx = (py - .5) * -6;                    // deg
-      const ry = (px - .5) *  6;
-      el.style.setProperty('--rx', `${rx}deg`);
-      el.style.setProperty('--ry', `${ry}deg`);
-    }, {passive:true});
-    ['mouseleave','blur'].forEach(type => el.addEventListener(type, () => {
-      el.style.setProperty('--rx','0deg'); el.style.setProperty('--ry','0deg');
-    }));
-  });
+  // 3D Tilt on cards
+  window.__tiltInit = () => {
+    const tiltTargets = document.querySelectorAll('.card');
+    tiltTargets.forEach(el => {
+      if (el.classList.contains('use-tilt')) return;
+      el.classList.add('use-tilt');
+      el.addEventListener('mousemove', (e) => {
+        const r = el.getBoundingClientRect();
+        const px = (e.clientX - r.left) / r.width;
+        const py = (e.clientY - r.top) / r.height;
+        const rx = (py - .5) * -6;
+        const ry = (px - .5) *  6;
+        el.style.setProperty('--rx', `${rx}deg`);
+        el.style.setProperty('--ry', `${ry}deg`);
+      }, {passive:true});
+      ['mouseleave','blur'].forEach(type => el.addEventListener(type, () => {
+        el.style.setProperty('--rx','0deg'); el.style.setProperty('--ry','0deg');
+      }));
+    });
+  };
 
   // Magnetic buttons
-  document.querySelectorAll('.btn').forEach(btn => {
-    btn.classList.add('magnet');
-    const strength = 8; // px
-    btn.addEventListener('mousemove', (e) => {
-      const r = btn.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width - .5) * strength;
-      const y = ((e.clientY - r.top) / r.height - .5) * strength;
-      btn.style.setProperty('--mx', `${x}px`);
-      btn.style.setProperty('--my', `${y}px`);
-    }, {passive:true});
-    ['mouseleave','blur'].forEach(t => btn.addEventListener(t, ()=>{
-      btn.style.setProperty('--mx','0px'); btn.style.setProperty('--my','0px');
-    }));
-  });
+  window.__magnetInit = () => {
+    document.querySelectorAll('.btn').forEach(btn => {
+      if (btn.classList.contains('magnet')) return;
+      btn.classList.add('magnet');
+      const strength = 8;
+      btn.addEventListener('mousemove', (e) => {
+        const r = btn.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width - .5) * strength;
+        const y = ((e.clientY - r.top) / r.height - .5) * strength;
+        btn.style.setProperty('--mx', `${x}px`);
+        btn.style.setProperty('--my', `${y}px`);
+      }, {passive:true});
+      ['mouseleave','blur'].forEach(t => btn.addEventListener(t, ()=>{
+        btn.style.setProperty('--mx','0px'); btn.style.setProperty('--my','0px');
+      }));
+    });
+  };
 
-  // Avatar parallax (very gentle)
+  // Avatar parallax
   const avatar = document.querySelector('.avatar-wrap');
   if (avatar && !reduce){
     const base = avatar.getBoundingClientRect().top + window.scrollY;
     const onScroll = () => {
-      const dy = (window.scrollY - base) * 0.05;   // adjust feel
+      const dy = (window.scrollY - base) * 0.05;
       avatar.style.transform = `translateY(${Math.max(-18, Math.min(18, dy))}px)`;
     };
     window.addEventListener('scroll', onScroll, {passive:true});
@@ -308,10 +314,8 @@ object-position: -5% -80%; }
   }
 
   // Active section link highlight
-  const sectionIds = ['#work','#skills','#experience','#projects','#contact'];
-  const sections = sectionIds
-    .map(id => document.querySelector(id))
-    .filter(Boolean);
+  const sectionIds = ['#spotlight','#projects','#skills','#experience','#contact'];
+  const sections = sectionIds.map(id => document.querySelector(id)).filter(Boolean);
   const navLinks = Array.from(document.querySelectorAll('.links a'))
     .filter(a => sectionIds.includes(a.getAttribute('href')));
 
@@ -330,219 +334,267 @@ object-position: -5% -80%; }
     sections.forEach(s => sectionObserver.observe(s));
   }
 })();
-    /* ===== Data ===== */
-    const info = {
-      name: "Khwaja Mohd Taha",
-      title: "Game Programmer / Software Engineer",
-      summary: "Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.",
-      resumeHref: "assets/Taha_Resumegd.pdf",
-      socials: [
-        { label: "GitHub", href: "https://github.com/KhwajaTaha" },
-        { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
-      ],
-      contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
-    projects: [
-  {
-    name: "Old B/W TV Effect",
-    tag: "Babylon.js • GLSL",
-    blurb: "A small “old B/W TV” effect for Babylon.js. No textures, just shader work: animated film grain, scanlines, gentle flicker, the odd horizontal glitch band, a bit of vignette, and a rare vertical roll for authentic vintage vibes.",
-    img: "assets/CRTeffect.png",
-    href: "https://playground.babylonjs.com/#O96GU3#1"
-  },
-  {
-    name: "Toon Shader",
-    tag: "Babylon.js • GLSL",
-    blurb: "A basic toon (cel) shader in Babylon.js, just wanted to see how close I could get to that comic-book look.",
-    img: "assets/Toonshader.png",
-    href: "https://playground.babylonjs.com/#69KHI6"
-  },
-  {
-    name:"Mirror World",
-    tag:"2D Puzzle Platformer",
-    blurb:"Can you hold them together? A dual-control reflection game for Android.",
-    img:"assets/mirror.png",
-    href:"https://imperfect-wizard.itch.io/mirror-world"
-  },
-  {
-    name:"Shores in the Abyss",
-    tag:"3D FPS (Unity)",
-    blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.",
-    img:"assets/shores.png",
-    href:"https://shariqusmani.itch.io/shores-in-the-abyss"
-  },
-  {
-    name:"An Unordinary Place",
-    tag:"WebGL Narrative",
-    blurb:"A short emotional story built for Brackeys Game Jam.",
-    img:"assets/unordinary-place.png",
-    href:"https://imperfect-wizard.itch.io/an-unordinary-place"
-  },
-  {
-    name:"Rider Santa",
-    tag:"2D Racing",
-    blurb:"Deliver gifts while racing across snowy hills — a festive Unity game!",
-    img:"assets/Rider-santa.png",
-    href:"https://imperfect-wizard.itch.io/rider-santa"
-  }
-],
 
-      skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
-      experience: [
-        { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present",
-          bullets:["Developed and maintained Lawyaltech.org; improved UX and performance.","Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.","Led a dev team; ensured security and code-quality compliance."]},
-        { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – October 2025",
-          bullets:["Cross-functional collaboration to deliver seamless product support.","Identified process improvements and guided customers."]},
-        { role:"Indie Game Developer (Self-Employed)", company:"Itch.io", period:"Mar 2023 – Present",
-          bullets:["Designed and shipped multiple indie titles.","Built gameplay systems, UI and core mechanics in Unity & Godot."]},
-        { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023",
-          bullets:["Contributed to Temple Run 2 systems and performance work.","Unity + Svelte + TypeScript; tests and perf benchmarks."]},
-        { role:"Game Programmer Intern", company:"Xansr Technologies", period:"Sep 2021 – Aug 2022",
-          bullets:["Client projects in Unity3D and web engines.","C#, Phaser, TypeScript, Git, Svelte."]}
-      ],
-      
-      itchProfile: "https://imperfect-wizard.itch.io/"
-    };
-
-    /* ===== Components ===== */
-    const SectionTitle = ({title}) => (<h2 style={{marginBottom:'14px'}}>{title}</h2>);
-
-    const Hero = () => (
-      <section aria-label="Intro">
-        <div className="hero">
-          <div className="avatar-wrap">
-            <img src="assets/avatar.png" alt="Black & white avatar of Khwaja Mohd Taha" className="avatar" decoding="async" loading="eager"/>
-          </div>
-          <div>
-            <span className="tag">Game Programmer</span>
-            <h1 style={{marginTop:'10px'}}>{info.name}</h1>
-            <p style={{marginTop:'6px'}}>{info.summary}</p>
-            <div style={{display:'flex', gap:'12px', flexWrap:'wrap', marginTop:'14px'}}>
-              <a className="btn" href={info.resumeHref} download>⬇ Download Résumé</a>
-              <a className="btn" href="#contact">✉ Contact</a>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-
-      const Projects = () => (
-      <section id="projects" aria-label="More Projects">
-        <SectionTitle title="Projects"/>
-        <div className="grid row-2">
-          {info.projects.map((p, i)=>(
-            <article className="card" key={i}>
-              <a href={p.href} target="_blank" rel="noopener">
-                <img className="thumb" src={p.img} alt={`${p.name} cover`}/>
-              </a>
-              <h3 style={{marginTop:'4px'}}><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
-              <div className="meta">{p.tag}</div>
-              <p>{p.blurb}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-    );
-
-    const Skills = () => (
-      <section id="skills" aria-label="Skills">
-        <SectionTitle title="Skills"/>
-        <div className="grid row-3">
-          {info.skills.map((s, i)=>(
-            <div className="card" key={i}><strong>{s}</strong></div>
-          ))}
-        </div>
-      </section>
-    );
-
-    const Experience = () => (
-      <section id="experience" aria-label="Experience">
-        <SectionTitle title="Experience"/>
-        <div className="grid">
-          {info.experience.map((e, i)=>(
-            <article className="card" key={i}>
-              <h3>{e.role} — {e.company}</h3>
-              <div className="meta">{e.period}</div>
-              <ul className="list">{e.bullets.map((b, j)=><li key={j}>{b}</li>)}</ul>
-            </article>
-          ))}
-        </div>
-      </section>
-    );
-
-  
-
-    const Contact = () => (
-      <section id="contact" aria-label="Contact & Links">
-        <SectionTitle title="Contact & Links"/>
-        <div className="grid contact">
-          <div className="card">
-            <div>
-              <div style={{fontWeight:800, fontSize:'12px'}}>EMAIL</div>
-              <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
-            </div>
-            <span aria-hidden="true">✉</span>
-          </div>
-          <div className="card">
-            <div>
-              <div style={{fontWeight:800, fontSize:'12px'}}>PHONE</div>
-              <div className="meta">{info.contact.phones.join(" · ")}</div>
-            </div>
-            <span aria-hidden="true">📱</span>
-          </div>
-          {info.socials.map((s, i)=>(
-            <div className="card" key={i}>
-              <div>
-                <div style={{fontWeight:800, fontSize:'12px'}}>{s.label.toUpperCase()}</div>
-                <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
-              </div>
-              <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
-            </div>
-          ))}
-          <div className="card">
-            <div>
-              <div style={{fontWeight:800, fontSize:'12px'}}>RÉSUMÉ</div>
-              <a href={info.resumeHref} download>Download PDF</a>
-            </div>
-            <span aria-hidden="true">⬇</span>
-          </div>
-          <div className="card">
-            <div>
-              <div style={{fontWeight:800, fontSize:'12px'}}>ITCH.IO PROFILE</div>
-              <a href="https://imperfect-wizard.itch.io/" target="_blank" rel="noopener">https://imperfect-wizard.itch.io/</a>
-            </div>
-            <span aria-hidden="true">🎮</span>
-          </div>
-        </div>
-      </section>
-    );
-
-    const Footer = () => (
-      <footer>© {new Date().getFullYear()} {info.name}. Built with HTML, CSS & React.</footer>
-    );
-
-    const App = () => (<><Hero/><Projects/><Skills/><Experience/><Contact/><Footer/></>);
-
-    /* Mount */
-    const root = ReactDOM.createRoot(document.getElementById('root'));
-    root.render(<App />);
-
-    /* ===== Drawer toggle (robust) ===== */
-    const drawer   = document.getElementById('drawer');
-    const backdrop = document.getElementById('backdrop');
-    const openBtn  = document.getElementById('openMenu');
-    const closeBtn = document.getElementById('closeMenu');
-    function setDrawer(open){
-      drawer.classList.toggle('open', open);
-      backdrop.classList.toggle('show', open);
-      document.body.classList.toggle('menu-open', open);
-      if (openBtn) openBtn.setAttribute('aria-expanded', String(open));
-      drawer.setAttribute('aria-hidden', String(!open));
+/* ===== Data ===== */
+const info = {
+  name: "Khwaja Mohd Taha",
+  title: "Game Programmer / Software Engineer",
+  summary: "Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.",
+  resumeHref: "assets/Taha_Resumegd.pdf",
+  socials: [
+    { label: "GitHub", href: "https://github.com/KhwajaTaha" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/khwaja-mohd-taha-a867b81aa/" }
+  ],
+  contact: { email: "khwajamohdtaha@gmail.com", phones: ["+91 8808991817"] },
+ // ✅ NEW: Spotlight / Shoutout section
+  spotlight: [
+    {
+      title: "Babylon.js Shoutout (X/Twitter)",
+      org: "Babylon.js",
+      date: "Sep 27, 2025",
+      blurb: "Babylon.js featured my black-and-white “old-timey” TV effect experiment in a community post.",
+      href: "https://x.com/babylonjs/status/1971983597872558324?s=20",
+      cta: "View the post",
+      badge: "Featured",
+      img: "assets/image.png" 
     }
-    if (openBtn) openBtn.addEventListener('click', ()=> setDrawer(!drawer.classList.contains('open')));
-    if (closeBtn) closeBtn.addEventListener('click', ()=> setDrawer(false));
-    if (backdrop) backdrop.addEventListener('click', ()=> setDrawer(false));
-    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> setDrawer(false)));
-    window.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(false); });
+  ],
+  projects: [
+    {
+      name: "Toon Shader",
+      tag: "Babylon.js • GLSL",
+      blurb: "A basic toon (cel) shader in Babylon.js, just wanted to see how close I could get to that comic-book look.",
+      img: "assets/Toonshader.png",
+      href: "https://playground.babylonjs.com/#69KHI6"
+    },
+    {
+      name:"Mirror World",
+      tag:"2D Puzzle Platformer",
+      blurb:"Can you hold them together? A dual-control reflection game for Android.",
+      img:"assets/mirror.png",
+      href:"https://imperfect-wizard.itch.io/mirror-world"
+    },
+    {
+      name:"Shores in the Abyss",
+      tag:"3D FPS (Unity)",
+      blurb:"Fight through mysterious ruins and uncover the secrets of the Abyss.",
+      img:"assets/shores.png",
+      href:"https://shariqusmani.itch.io/shores-in-the-abyss"
+    },
+    {
+      name:"An Unordinary Place",
+      tag:"WebGL Narrative",
+      blurb:"A short emotional story built for Brackeys Game Jam.",
+      img:"assets/unordinary-place.png",
+      href:"https://imperfect-wizard.itch.io/an-unordinary-place"
+    },
+    {
+      name:"Rider Santa",
+      tag:"2D Racing",
+      blurb:"Deliver gifts while racing across snowy hills — a festive Unity game!",
+      img:"assets/Rider-santa.png",
+      href:"https://imperfect-wizard.itch.io/rider-santa"
+    }
+  ],
+
+ 
+
+  skills: ["C/C++","C#","JavaScript/TypeScript","Python","GLSL","Unity","Unreal Engine","Babylon.js","Phaser","Perforce","Git","Blender","Jira","WebGL","Android/iOS/Windows"],
+  experience: [
+    { role:"Software Engineer", company:"Lawyaltech", period:"Mar 2023 – Present",
+      bullets:["Developed and maintained Lawyaltech.org; improved UX and performance.","Integrated CRM and SEO; managed full lifecycle incl. QA and delivery.","Led a dev team; ensured security and code-quality compliance."]},
+    { role:"Customer Support Executive", company:"Avvoka (London, UK)", period:"Mar 2023 – October 2025",
+      bullets:["Cross-functional collaboration to deliver seamless product support.","Identified process improvements and guided customers."]},
+    { role:"Indie Game Developer (Self-Employed)", company:"Itch.io", period:"Mar 2023 – Present",
+      bullets:["Designed and shipped multiple indie titles.","Built gameplay systems, UI and core mechanics in Unity & Godot."]},
+    { role:"Game Programmer", company:"Xansr Technologies", period:"Aug 2022 – Feb 2023",
+      bullets:["Contributed to Temple Run 2 systems and performance work.","Unity + Svelte + TypeScript; tests and perf benchmarks."]},
+    { role:"Game Programmer Intern", company:"Xansr Technologies", period:"Sep 2021 – Aug 2022",
+      bullets:["Client projects in Unity3D and web engines.","C#, Phaser, TypeScript, Git, Svelte."]}
+  ],
+
+  itchProfile: "https://imperfect-wizard.itch.io/"
+};
+
+/* ===== Components ===== */
+const SectionTitle = ({title}) => (<h2 style={{marginBottom:'14px'}}>{title}</h2>);
+
+const Hero = () => (
+  <section aria-label="Intro">
+    <div className="hero">
+      <div className="avatar-wrap">
+        <img src="assets/avatar.png" alt="Black & white avatar of Khwaja Mohd Taha" className="avatar" decoding="async" loading="eager"/>
+      </div>
+      <div>
+        <span className="tag">Game Programmer</span>
+        <h1 style={{marginTop:'10px'}}>{info.name}</h1>
+        <p style={{marginTop:'6px'}}>{info.summary}</p>
+        <div style={{display:'flex', gap:'12px', flexWrap:'wrap', marginTop:'14px'}}>
+          <a className="btn" href={info.resumeHref} download>⬇ Download Résumé</a>
+          <a className="btn" href="#contact">✉ Contact</a>
+        </div>
+      </div>
+    </div>
+  </section>
+);
+
+const Projects = () => (
+  <section id="projects" aria-label="More Projects">
+    <SectionTitle title="Projects"/>
+    <div className="grid row-2">
+      {info.projects.map((p, i)=>(
+        <article className="card" key={i}>
+          <a href={p.href} target="_blank" rel="noopener">
+            <img className="thumb" src={p.img} alt={`${p.name} cover`}/>
+          </a>
+          <h3 style={{marginTop:'4px'}}><a href={p.href} target="_blank" rel="noopener">{p.name}</a></h3>
+          <div className="meta">{p.tag}</div>
+          <p>{p.blurb}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+);
+
+// ✅ NEW: Spotlight section component
+const Spotlight = () => (
+  <section id="spotlight" aria-label="Spotlight">
+    <SectionTitle title="Spotlight"/>
+    <div className="grid">
+      {info.spotlight.map((s, i)=>(
+        <article className="card" key={i}>
+          <div style={{display:'flex', justifyContent:'space-between', gap:'12px', flexWrap:'wrap', alignItems:'baseline'}}>
+            <h3 style={{margin:0}}>{s.title}</h3>
+            <span className="tag" style={{fontSize:'12px'}}>{s.badge}</span>
+          </div>
+          <div className="meta">{s.org} · {s.date}</div>
+          {s.img && (
+  <a href={s.href} target="_blank" rel="noopener">
+    <img className="thumb" src={s.img} alt={`${s.title} preview`} />
+  </a>
+)}
+
+          <p>{s.blurb}</p>
+          <div style={{marginTop:'12px'}}>
+            <a className="btn" href={s.href} target="_blank" rel="noopener">🔗 {s.cta}</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+);
+
+const Skills = () => (
+  <section id="skills" aria-label="Skills">
+    <SectionTitle title="Skills"/>
+    <div className="grid row-3">
+      {info.skills.map((s, i)=>(
+        <div className="card" key={i}><strong>{s}</strong></div>
+      ))}
+    </div>
+  </section>
+);
+
+const Experience = () => (
+  <section id="experience" aria-label="Experience">
+    <SectionTitle title="Experience"/>
+    <div className="grid">
+      {info.experience.map((e, i)=>(
+        <article className="card" key={i}>
+          <h3>{e.role} — {e.company}</h3>
+          <div className="meta">{e.period}</div>
+          <ul className="list">{e.bullets.map((b, j)=><li key={j}>{b}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+);
+
+const Contact = () => (
+  <section id="contact" aria-label="Contact & Links">
+    <SectionTitle title="Contact & Links"/>
+    <div className="grid contact">
+      <div className="card">
+        <div>
+          <div style={{fontWeight:800, fontSize:'12px'}}>EMAIL</div>
+          <a href={`mailto:${info.contact.email}`}>{info.contact.email}</a>
+        </div>
+        <span aria-hidden="true">✉</span>
+      </div>
+
+      <div className="card">
+        <div>
+          <div style={{fontWeight:800, fontSize:'12px'}}>PHONE</div>
+          <div className="meta">{info.contact.phones.join(" · ")}</div>
+        </div>
+        <span aria-hidden="true">📱</span>
+      </div>
+
+      {info.socials.map((s, i)=>(
+        <div className="card" key={i}>
+          <div>
+            <div style={{fontWeight:800, fontSize:'12px'}}>{s.label.toUpperCase()}</div>
+            <a href={s.href} target="_blank" rel="noopener">{s.href}</a>
+          </div>
+          <span aria-hidden="true">{s.label === "GitHub" ? "🐙" : "🔗"}</span>
+        </div>
+      ))}
+
+      <div className="card">
+        <div>
+          <div style={{fontWeight:800, fontSize:'12px'}}>RÉSUMÉ</div>
+          <a href={info.resumeHref} download>Download PDF</a>
+        </div>
+        <span aria-hidden="true">⬇</span>
+      </div>
+
+      <div className="card">
+        <div>
+          <div style={{fontWeight:800, fontSize:'12px'}}>ITCH.IO PROFILE</div>
+          <a href={info.itchProfile} target="_blank" rel="noopener">{info.itchProfile}</a>
+        </div>
+        <span aria-hidden="true">🎮</span>
+      </div>
+    </div>
+  </section>
+);
+
+const Footer = () => (
+  <footer>© {new Date().getFullYear()} {info.name}. Built with HTML, CSS & React.</footer>
+);
+
+const App = () => (<><Hero/><Spotlight/><Projects/><Skills/><Experience/><Contact/><Footer/></>);
+
+/* Mount */
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+/* After render: init reveal/tilt/magnet (so spotlight cards also get effects) */
+setTimeout(() => {
+  window.__revealInit && window.__revealInit();
+  window.__tiltInit && window.__tiltInit();
+  window.__magnetInit && window.__magnetInit();
+}, 0);
+
+/* ===== Drawer toggle (robust) ===== */
+const drawer   = document.getElementById('drawer');
+const backdrop = document.getElementById('backdrop');
+const openBtn  = document.getElementById('openMenu');
+const closeBtn = document.getElementById('closeMenu');
+
+function setDrawer(open){
+  drawer.classList.toggle('open', open);
+  backdrop.classList.toggle('show', open);
+  document.body.classList.toggle('menu-open', open);
+  if (openBtn) openBtn.setAttribute('aria-expanded', String(open));
+  drawer.setAttribute('aria-hidden', String(!open));
+}
+
+if (openBtn) openBtn.addEventListener('click', ()=> setDrawer(!drawer.classList.contains('open')));
+if (closeBtn) closeBtn.addEventListener('click', ()=> setDrawer(false));
+if (backdrop) backdrop.addEventListener('click', ()=> setDrawer(false));
+drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', ()=> setDrawer(false)));
+window.addEventListener('keydown', e => { if (e.key === 'Escape') setDrawer(false); });
   </script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Khwaja Mohd Taha — Game Programmer</title>
+<title>Khwaja Mohd Taha — Game Programmer / Technical Artist</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -120,7 +120,12 @@
 
   /* Thumbs (default projects look) */
   .thumb{
-    width:100%; border-radius:10px; margin-bottom:10px;
+    display:block;
+    width:100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius:10px;
+    margin-bottom:10px;
     filter: grayscale(1) contrast(1.15) brightness(.95);
     border:2px solid var(--ink);
     transition: filter .2s ease;
@@ -203,7 +208,7 @@
         <div>
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
             <strong>Khwaja Mohd Taha</strong>
-            <span class="badge">Game Programmer</span>
+            <span class="badge">Game Programmer / Technical Artist</span>
           </div>
         </div>
       </div>
@@ -355,8 +360,8 @@
 /* ===== Data ===== */
 const info = {
   name: "Khwaja Mohd Taha",
-  title: "Game Programmer / Software Engineer",
-  summary: "Innovative and results-driven engineer with 3+ years in game dev and software, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.",
+  title: "Game Programmer / Technical Artist",
+  summary: "Innovative and results-driven engineer with 3+ years in game dev and technical art, focused on Unity, Unreal and WebGL. I build scalable, interactive, performance-optimized experiences and ship end-to-end.",
   resumeHref: "assets/Taha_Resumegd.pdf",
   socials: [
     { label: "GitHub", href: "https://github.com/KhwajaTaha" },
@@ -378,6 +383,13 @@ const info = {
   ],
 
   projects: [
+    {
+      name: "Zoinks! The 1969 Cel Shader",
+      tag: "WebGL Shader Experiment",
+      blurb: "A vintage cel-shading experience with flat colors, ink outlines and analog film wear in the browser.",
+      img: "assets/zoinks.png",
+      href: "https://zoinks-celshader.netlify.app"
+    },
     {
       name: "Toon Shader",
       tag: "Babylon.js • GLSL",
@@ -443,7 +455,7 @@ const Hero = () => (
         <img src="assets/avatar.png" alt="Black & white avatar of Khwaja Mohd Taha" className="avatar" decoding="async" loading="eager"/>
       </div>
       <div>
-        <span className="tag">Game Programmer</span>
+        <span className="tag">Game Programmer / Technical Artist</span>
         <h1 style={{marginTop:'10px'}}>{info.name}</h1>
         <p style={{marginTop:'6px'}}>{info.summary}</p>
         <div style={{display:'flex', gap:'12px', flexWrap:'wrap', marginTop:'14px'}}>
